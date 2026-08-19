@@ -43,7 +43,7 @@ class PlottingController extends Controller
     public function create()
     {
         $kelompokList = KelompokPpl::where('status', 'aktif')->get();
-        $mitraList = Mitra::where('status_kerja_sama', 'aktif')->get();
+        $mitraList = Mitra::orderBy('nama_mitra')->get();
         $dplList = User::where('role', 'dpl')->where('is_active', true)->get();
         $unassignedMahasiswa = Mahasiswa::whereNull('kelompok_id')->get();
 
@@ -68,7 +68,7 @@ class PlottingController extends Controller
     {
         $kelompok->load(['mitra', 'dpl', 'anggota']);
 
-        $mitraList = Mitra::where('status_kerja_sama', 'aktif')->get();
+        $mitraList = Mitra::orderBy('nama_mitra')->get();
         $dplList = User::where('role', 'dpl')->where('is_active', true)->get();
 
         // Available mahasiswa: unassigned OR already in this kelompok

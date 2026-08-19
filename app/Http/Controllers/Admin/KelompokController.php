@@ -48,7 +48,7 @@ class KelompokController extends Controller
      */
     public function create()
     {
-        $mitraList = Mitra::where('status_kerja_sama', 'aktif')->get();
+        $mitraList = Mitra::orderBy('nama_mitra')->get();
         $dplList = User::where('role', 'dpl')->where('is_active', true)->get();
 
         return view('admin.kelompok.create', compact('mitraList', 'dplList'));
