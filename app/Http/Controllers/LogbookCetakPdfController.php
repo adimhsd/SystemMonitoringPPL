@@ -47,11 +47,29 @@ class LogbookCetakPdfController extends Controller
         foreach ($logbookList as $logbook) {
             $logbook->foto_base64 = null;
             if ($logbook->foto_dokumentasi) {
-                $path = storage_path('app/public/' . $logbook->foto_dokumentasi);
-                if (file_exists($path)) {
-                    $type = pathinfo($path, PATHINFO_EXTENSION);
-                    $data = file_get_contents($path);
+                $possiblePaths = [
+                    storage_path('app/private/' . $logbook->foto_dokumentasi),
+                    storage_path('app/' . $logbook->foto_dokumentasi),
+                    storage_path('app/public/' . $logbook->foto_dokumentasi),
+                    public_path('storage/' . $logbook->foto_dokumentasi),
+                ];
+
+                $foundPath = null;
+                foreach ($possiblePaths as $p) {
+                    if (file_exists($p) && is_file($p)) {
+                        $foundPath = $p;
+                        break;
+                    }
+                }
+
+                if ($foundPath) {
+                    $ext = strtolower(pathinfo($foundPath, PATHINFO_EXTENSION));
+                    $type = in_array($ext, ['png', 'gif', 'webp']) ? $ext : 'jpeg';
+                    $data = file_get_contents($foundPath);
                     $logbook->foto_base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                } elseif (\Illuminate\Support\Facades\Storage::exists($logbook->foto_dokumentasi)) {
+                    $data = \Illuminate\Support\Facades\Storage::get($logbook->foto_dokumentasi);
+                    $logbook->foto_base64 = 'data:image/jpeg;base64,' . base64_encode($data);
                 }
             }
         }

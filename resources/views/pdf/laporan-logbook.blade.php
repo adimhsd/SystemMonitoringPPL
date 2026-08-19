@@ -239,17 +239,16 @@
             <tr>
                 <td>
                     Mengetahui,<br>
-                    <strong>Pembimbing Lapangan Mitra Instansi</strong>
+                    <strong>Pembimbing / PIC Mitra</strong>
                     <div class="signature-space"></div>
-                    <strong>( {{ $kelompok->mitra->pic_nama ?? '...................................................' }} )</strong><br>
-                    <span style="font-size: 8pt; color: #64748b;">NIP / ID: {{ $kelompok->mitra->pic_kontak ?? '-' }}</span>
+                    <strong>( {{ $kelompok->mitra->pic_nama ?? '...................................................' }} )</strong>
                 </td>
                 <td>
                     Kuningan, {{ $tglCetak }}<br>
                     <strong>Dosen Pembimbing Lapangan (DPL)</strong>
                     <div class="signature-space"></div>
                     <strong>( {{ $kelompok->dpl->nama_lengkap ?? '...................................................' }} )</strong><br>
-                    <span style="font-size: 8pt; color: #64748b;">NIP / NIDN: {{ $kelompok->dpl->username ?? '-' }}</span>
+                    <span style="font-size: 8pt; color: #64748b;">NIP / NIDN: {{ $kelompok->dpl->nip_nidn ?? $kelompok->dpl->username ?? '-' }}</span>
                 </td>
             </tr>
         </table>
