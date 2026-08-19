@@ -33,8 +33,6 @@ use App\Http\Controllers\PicMitra\DashboardController as PicDashboardController;
 use App\Http\Controllers\PicMitra\LogbookController as PicLogbookController;
 use App\Http\Controllers\PicMitra\PenilaianController as PicPenilaianController;
 
-use App\Http\Controllers\ProfileController;
-
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,10 +52,11 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 
 Route::middleware(['auth'])->group(function () {
 
-    // Must Change Password Enforcer Routes
-    Route::get('/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('password.change');
-    Route::get('/change-password-form', [ProfileController::class, 'showChangePasswordForm'])->name('password.change.form');
-    Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('password.change.update');
+    // Must Change Password Enforcer & Manual Password Update Routes
+    Route::get('/change-password', [AuthenticatedSessionController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::get('/change-password-form', [AuthenticatedSessionController::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('/change-password', [AuthenticatedSessionController::class, 'updatePassword'])->name('password.change.update');
+    Route::post('/update-password', [AuthenticatedSessionController::class, 'updatePassword'])->name('password.update');
 
     Route::middleware(['must.change.password'])->group(function () {
 
