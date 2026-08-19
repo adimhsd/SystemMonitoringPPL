@@ -23,6 +23,7 @@ use App\Http\Controllers\KetuaKelompok\DashboardController as StudentDashboardCo
 use App\Http\Controllers\KetuaKelompok\LogbookController as StudentLogbookController;
 use App\Http\Controllers\KetuaKelompok\LuaranController as StudentLuaranController;
 
+use App\Http\Controllers\LogbookCetakPdfController;
 use App\Http\Controllers\LogbookFotoController;
 use App\Http\Controllers\LuaranFileController as LuaranDownloadController;
 use App\Http\Controllers\NotifikasiController as NotificationController;
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/mitra/export', [AdminMitraController::class, 'exportExcel'])->name('mitra.export');
             Route::post('/mitra/import', [AdminMitraController::class, 'importExcel'])->name('mitra.import');
             Route::resource('mitra', AdminMitraController::class);
+            Route::get('/kelompok/{kelompok}/logbook-pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('kelompok.logbook.pdf');
             Route::resource('kelompok', AdminKelompokController::class);
             
             // Plotting Kelompok
@@ -111,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['role:dpl'])->prefix('dpl')->as('dpl.')->group(function () {
             Route::get('/dashboard', [DplDashboardController::class, 'index'])->name('dashboard');
             Route::get('/logbook', [DplLogbookController::class, 'index'])->name('logbook.index');
+            Route::get('/logbook/{kelompok}/pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('logbook.pdf');
             Route::get('/logbook/{logbook}', [DplLogbookController::class, 'show'])->name('logbook.show');
             Route::post('/logbook/{logbook}/viewed', [DplLogbookController::class, 'markAsViewed'])->name('logbook.viewed');
             Route::get('/luaran', [DplLuaranController::class, 'index'])->name('luaran.index');
@@ -145,6 +148,7 @@ Route::middleware(['auth'])->group(function () {
         // Alias for ketua route names
         Route::middleware(['role:ketua_kelompok'])->prefix('ketua')->as('ketua.')->group(function () {
             Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+            Route::get('/logbook-pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('logbook.pdf');
             Route::resource('logbook', StudentLogbookController::class);
             Route::get('/luaran', [StudentLuaranController::class, 'index'])->name('luaran.index');
             Route::post('/luaran', [StudentLuaranController::class, 'storeOrUpdate'])->name('luaran.store');

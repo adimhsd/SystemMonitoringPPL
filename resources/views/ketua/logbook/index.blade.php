@@ -8,7 +8,10 @@
         <h4 class="fw-bold mb-1">Logbook Kegiatan Harian PPL</h4>
         <p class="text-muted mb-0 fs-7">Pelaporan aktivitas magang harian untuk kelompok: <strong>{{ $kelompok->nama_kelompok }}</strong></p>
     </div>
-    <div>
+    <div class="d-flex gap-2">
+        <a href="{{ route('ketua.logbook.pdf') }}" class="btn btn-outline-danger btn-touch rounded-3 fw-semibold fs-7">
+            📄 Cetak Laporan PDF
+        </a>
         <a href="{{ route('ketua.logbook.create') }}" class="btn btn-primary btn-touch text-white rounded-3 fw-semibold">
             + Input Logbook Hari Ini
         </a>

@@ -95,6 +95,9 @@
                         </td>
                         <td class="text-end pe-4">
                             <div class="btn-group">
+                                <a href="{{ route('admin.kelompok.logbook.pdf', $k) }}" class="btn btn-sm btn-outline-danger" title="Cetak Laporan Logbook PDF">
+                                    📄 Logbook PDF
+                                </a>
                                 <a href="{{ route('admin.kelompok.show', $k) }}" class="btn btn-sm btn-outline-info">
                                     👁️ Detail
                                 </a>

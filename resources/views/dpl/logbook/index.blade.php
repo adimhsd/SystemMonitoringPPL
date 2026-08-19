@@ -29,6 +29,9 @@
         </div>
         <div class="col-12 col-md-3 d-flex gap-2">
             <button type="submit" class="btn btn-outline-primary fs-7 w-100">Filter</button>
+            @if(request('kelompok_id'))
+                <a href="{{ route('dpl.logbook.pdf', request('kelompok_id')) }}" class="btn btn-outline-danger fs-7 text-nowrap" title="Cetak Laporan Logbook PDF">📄 PDF</a>
+            @endif
             <a href="{{ route('dpl.logbook.index') }}" class="btn btn-outline-secondary fs-7">Reset</a>
         </div>
     </form>
@@ -74,6 +77,9 @@
                             @endif
                         </td>
                         <td class="text-end pe-4">
+                            <a href="{{ route('dpl.logbook.pdf', $logbook->kelompok_id) }}" class="btn btn-sm btn-outline-danger me-1" title="Cetak Laporan Logbook PDF">
+                                📄 PDF
+                            </a>
                             <a href="{{ route('dpl.logbook.show', $logbook) }}" class="btn btn-sm btn-outline-primary">
                                 Detail Logbook
                             </a>
