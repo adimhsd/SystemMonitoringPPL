@@ -20,6 +20,8 @@ class KegiatanHarian extends Model
         'foto_dokumentasi',
         'dilihat_mitra',
         'dilihat_mitra_at',
+        'status_validasi_mitra',
+        'catatan_mitra',
         'dilihat_dpl',
         'dilihat_dpl_at',
         'terlambat',

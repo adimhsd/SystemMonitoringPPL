@@ -67,7 +67,20 @@
                 <label class="form-label fs-8 text-muted fw-semibold mb-1">Status PIC Mitra:</label>
                 @if($logbook->dilihat_mitra)
                     <div class="alert alert-success fs-8 py-2 px-3 mb-0">
-                        ✓ Telah di-approve oleh PIC Mitra
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong>✓ Approved PIC Mitra</strong>
+                            @if(($logbook->status_validasi_mitra ?? 'sesuai') === 'tidak_sesuai')
+                                <span class="badge bg-danger text-white fs-8">🔴 Tidak Sesuai</span>
+                            @else
+                                <span class="badge bg-success text-white fs-8">🟢 Sesuai</span>
+                            @endif
+                        </div>
+                        @if($logbook->catatan_mitra)
+                            <div class="mt-2 bg-white p-2 rounded border text-dark">
+                                💬 <strong>Catatan PIC Mitra:</strong><br>
+                                <em>"{{ $logbook->catatan_mitra }}"</em>
+                            </div>
+                        @endif
                     </div>
                 @else
                     <div class="alert alert-warning fs-8 py-2 px-3 mb-0">

@@ -61,7 +61,9 @@ class LogbookReviewAndVerificationTest extends TestCase
         $this->logbook->kelompok->update(['mitra_id' => $mitra->id]);
         $this->logbook->update(['dilihat_mitra' => false, 'dilihat_mitra_at' => null]);
 
-        $response = $this->actingAs($this->pic)->post("/pic/logbook/{$this->logbook->id}/viewed");
+        $response = $this->actingAs($this->pic)->post("/pic/logbook/{$this->logbook->id}/viewed", [
+            'status_validasi_mitra' => 'sesuai',
+        ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('kegiatan_harian', [
@@ -71,7 +73,7 @@ class LogbookReviewAndVerificationTest extends TestCase
 
         $this->assertDatabaseHas('notifikasi', [
             'user_id' => $this->logbook->kelompok->ketua_user_id,
-            'judul' => 'Logbook Di-Approve Pembimbing Mitra',
+            'judul' => 'Logbook Di-Approve Pembimbing Mitra (Sesuai)',
         ]);
     }
 

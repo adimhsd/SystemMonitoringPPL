@@ -58,9 +58,15 @@
                             </td>
                             <td>
                                 @if($logbook->dilihat_mitra)
-                                    <span class="badge bg-success bg-opacity-10 text-success border border-success">
-                                        ✓ Approved ({{ $logbook->dilihat_mitra_at->format('d/m H:i') }})
-                                    </span>
+                                    @if(($logbook->status_validasi_mitra ?? 'sesuai') === 'tidak_sesuai')
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger">
+                                            🔴 Tidak Sesuai
+                                        </span>
+                                    @else
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                                            🟢 Sesuai
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="badge bg-warning bg-opacity-10 text-dark border border-warning">
                                         Belum Di-Approve PIC

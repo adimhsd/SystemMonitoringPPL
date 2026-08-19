@@ -69,7 +69,7 @@ class LogbookController extends Controller
     /**
      * Tandai Logbook Telah Dilihat oleh PIC Mitra.
      */
-    public function markAsViewed(KegiatanHarian $logbook)
+    public function markAsViewed(Request $request, KegiatanHarian $logbook)
     {
         $pic = Auth::user();
         $mitra = Mitra::where('pic_user_id', $pic->id)->first();
@@ -78,22 +78,32 @@ class LogbookController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        if (! $logbook->dilihat_mitra) {
-            $logbook->update([
-                'dilihat_mitra' => true,
-                'dilihat_mitra_at' => now(),
-            ]);
+        $request->validate([
+            'status_validasi_mitra' => 'required|in:sesuai,tidak_sesuai',
+            'catatan_mitra' => 'nullable|string|max:1000',
+        ]);
 
-            // Kirim notifikasi ke Ketua Kelompok
-            NotifikasiService::kirim(
-                $logbook->kelompok->ketua_user_id,
-                'Logbook Di-Approve Pembimbing Mitra',
-                'Logbook tanggal ' . $logbook->tanggal->format('d/m/Y') . ' telah di-approve oleh Pembimbing Mitra (' . $pic->nama_lengkap . ').',
-                route('ketua.logbook.index')
-            );
-        }
+        $status = $request->input('status_validasi_mitra', 'sesuai');
+        $catatan = $request->input('catatan_mitra');
+
+        $logbook->update([
+            'dilihat_mitra' => true,
+            'dilihat_mitra_at' => now(),
+            'status_validasi_mitra' => $status,
+            'catatan_mitra' => $catatan,
+        ]);
+
+        $statusText = $status === 'sesuai' ? 'Sesuai' : 'Tidak Sesuai';
+
+        // Kirim notifikasi ke Akun Kelompok
+        NotifikasiService::kirim(
+            $logbook->kelompok->ketua_user_id,
+            'Logbook Di-Approve Pembimbing Mitra (' . $statusText . ')',
+            'Logbook tanggal ' . $logbook->tanggal->format('d/m/Y') . ' telah di-approve oleh Pembimbing Mitra (' . $pic->nama_lengkap . ') dengan keterangan: ' . $statusText . '.',
+            route('ketua.logbook.index')
+        );
 
         return redirect()->back()
-            ->with('success', 'Logbook berhasil di-approve.');
+            ->with('success', 'Logbook berhasil di-approve dengan keterangan: ' . $statusText . '.');
     }
 }

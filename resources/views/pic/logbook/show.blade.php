@@ -34,26 +34,67 @@
 
             <p class="text-secondary fs-7 mb-2">👥 <strong>Kelompok:</strong> {{ $logbook->kelompok->nama_kelompok }}</p>
             <p class="text-secondary fs-7 mb-2">👨‍🏫 <strong>DPL Fakultas:</strong> {{ $logbook->kelompok->dpl->nama_lengkap ?? '-' }}</p>
-            <p class="text-secondary fs-7 mb-3">👑 <strong>Ketua:</strong> {{ $logbook->kelompok->ketua->nama_lengkap ?? '-' }}</p>
+            <p class="text-secondary fs-7 mb-3">🔑 <strong>Akun Kelompok:</strong> {{ $logbook->kelompok->ketua->username ?? '-' }}</p>
 
             <hr>
 
-            <h6 class="fw-bold text-dark fs-7 mb-2">Status Approval PIC Mitra:</h6>
+            <h6 class="fw-bold text-dark fs-7 mb-3">Form Verification & Approval PIC Mitra:</h6>
+
             @if($logbook->dilihat_mitra)
-                <div class="alert alert-success fs-7 mb-3">
-                    ✓ Telah di-approve pada {{ $logbook->dilihat_mitra_at->translatedFormat('d F Y H:i') }} WIB
+                <div class="alert alert-success fs-7 mb-3 p-3 rounded-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong class="text-success">✓ Sudah Di-Approve</strong>
+                        @if(($logbook->status_validasi_mitra ?? 'sesuai') === 'tidak_sesuai')
+                            <span class="badge bg-danger text-white fs-8">🔴 Tidak Sesuai</span>
+                        @else
+                            <span class="badge bg-success text-white fs-8">🟢 Sesuai</span>
+                        @endif
+                    </div>
+                    <span class="fs-8 text-muted d-block mb-2">Pada {{ $logbook->dilihat_mitra_at->translatedFormat('d F Y H:i') }} WIB</span>
+                    
+                    @if($logbook->catatan_mitra)
+                        <div class="bg-white p-2 rounded-2 border fs-8 text-dark mt-2">
+                            💬 <strong>Catatan PIC Mitra:</strong><br>
+                            <em>"{{ $logbook->catatan_mitra }}"</em>
+                        </div>
+                    @endif
                 </div>
             @else
                 <div class="alert alert-warning fs-7 mb-3">
-                    ⚠️ Belum di-approve oleh Anda.
+                    ⚠️ Logbook ini belum diverifikasi/di-approve.
                 </div>
-                <form action="{{ route('pic.logbook.viewed', $logbook) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-success btn-touch text-white w-100 fw-semibold rounded-3">
-                        ✓ Approve Logbook
-                    </button>
-                </form>
             @endif
+
+            <form action="{{ route('pic.logbook.viewed', $logbook) }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="status_validasi_mitra" class="form-label fw-bold text-dark fs-7 mb-1">
+                        Keterangan Kesesuaian: <span class="text-danger">*</span>
+                    </label>
+                    <select name="status_validasi_mitra" id="status_validasi_mitra" class="form-select form-select-sm fs-7 fw-semibold @error('status_validasi_mitra') is-invalid @enderror" required>
+                        <option value="sesuai" {{ old('status_validasi_mitra', $logbook->status_validasi_mitra ?? 'sesuai') === 'sesuai' ? 'selected' : '' }}>
+                            🟢 Sesuai (Kegiatan dilaporkan valid)
+                        </option>
+                        <option value="tidak_sesuai" {{ old('status_validasi_mitra', $logbook->status_validasi_mitra ?? '') === 'tidak_sesuai' ? 'selected' : '' }}>
+                            🔴 Tidak Sesuai (Perlu perbaikan)
+                        </option>
+                    </select>
+                    @error('status_validasi_mitra')
+                        <div class="invalid-feedback fs-8">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="catatan_mitra" class="form-label fw-bold text-dark fs-7 mb-1">
+                        Catatan / Umpan Balik (Opsional):
+                    </label>
+                    <textarea name="catatan_mitra" id="catatan_mitra" class="form-control form-control-sm fs-7" rows="3" placeholder="Masukkan catatan atau masukan jika tidak sesuai...">{{ old('catatan_mitra', $logbook->catatan_mitra) }}</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-touch text-white w-100 fw-semibold rounded-3 shadow-sm">
+                    {{ $logbook->dilihat_mitra ? '🔄 Perbarui Approval & Keterangan' : '✓ Simpan Approval Logbook' }}
+                </button>
+            </form>
         </div>
     </div>
 </div>

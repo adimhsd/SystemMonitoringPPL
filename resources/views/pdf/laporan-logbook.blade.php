@@ -99,6 +99,11 @@
             color: #166534;
             border: 1px solid #86efac;
         }
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
         .badge-warning {
             background-color: #fef9c3;
             color: #854d0e;
@@ -228,7 +233,14 @@
                     <td>
                         <div style="margin-bottom: 4px;">
                             @if($logbook->dilihat_mitra)
-                                <span class="badge-status badge-success">&bull; Approved PIC Mitra</span>
+                                @if(($logbook->status_validasi_mitra ?? 'sesuai') === 'tidak_sesuai')
+                                    <span class="badge-status badge-danger">&bull; PIC Mitra: Tidak Sesuai</span>
+                                @else
+                                    <span class="badge-status badge-success">&bull; PIC Mitra: Sesuai</span>
+                                @endif
+                                @if($logbook->catatan_mitra)
+                                    <div style="font-size: 7.5pt; color: #475569; margin-top: 2px; font-style: italic;">"{{ $logbook->catatan_mitra }}"</div>
+                                @endif
                             @else
                                 <span class="badge-status badge-warning">&bull; Belum Di-Approve Mitra</span>
                             @endif
