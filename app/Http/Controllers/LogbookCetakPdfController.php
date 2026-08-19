@@ -20,10 +20,7 @@ class LogbookCetakPdfController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'ketua_kelompok') {
-            $kelompok = KelompokPpl::where('ketua_user_id', $user->id)
-                ->orWhereHas('anggota', function ($q) use ($user) {
-                    $q->where('user_id', $user->id);
-                })->first();
+            $kelompok = KelompokPpl::where('ketua_user_id', $user->id)->first();
 
             if (! $kelompok) {
                 return redirect()->back()->with('error', 'Kelompok PPL Anda belum terdaftar.');
