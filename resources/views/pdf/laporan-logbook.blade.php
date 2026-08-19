@@ -160,17 +160,25 @@
             <td class="label">Instansi Mitra</td>
             <td class="colon">:</td>
             <td>{{ $kelompok->mitra->nama_mitra ?? '-' }}</td>
-            <td class="label">Ketua Kelompok</td>
+            <td class="label">Pembimbing PIC Mitra</td>
             <td class="colon">:</td>
-            <td>{{ $kelompok->ketua->nama_lengkap ?? '-' }}</td>
+            <td>{{ $kelompok->mitra->picUser->nama_lengkap ?? '-' }}</td>
         </tr>
         <tr>
             <td class="label">Alamat Mitra</td>
             <td class="colon">:</td>
             <td>{{ $kelompok->mitra->alamat ?? '-' }}</td>
+            <td class="label">Ketua Kelompok</td>
+            <td class="colon">:</td>
+            <td>{{ $kelompok->ketua->nama_lengkap ?? '-' }}</td>
+        </tr>
+        <tr>
             <td class="label">Jumlah Anggota</td>
             <td class="colon">:</td>
             <td>{{ $kelompok->anggota->count() }} Mahasiswa</td>
+            <td class="label">Tahun Akademik</td>
+            <td class="colon">:</td>
+            <td>{{ $kelompok->tahun_akademik }}</td>
         </tr>
     </table>
 

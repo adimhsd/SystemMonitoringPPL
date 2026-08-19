@@ -1,26 +1,25 @@
-# Walkthrough Implementation — Perbaikan Tampilan Foto & Penyelarasan Pengesahan PDF Logbook
+# Walkthrough Implementation — Perbaikan Pemetaan Nama PIC Mitra dari Relasi User
 
-Pembaruan pencarian **Foto Dokumentasi Logbook (Base64 Multi-Path)** serta penyelarasan **Teks Lembar Pengesahan PDF** telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Pembaruan relasi **Nama PIC Mitra (`$mitra->picUser->nama_lengkap`)** pada lembar pengesahan berkas PDF Logbook telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🚀 Perubahan yang Diterapkan
+## 🛠️ Analisis & Perbaikan
 
-### 1. 📷 Perbaikan Penampil Foto Dokumentasi Logbook
-- **Solusi Multi-Path**: Menambahkan logika fallback pencarian lokasi file foto pada `storage/app/private/`, `storage/app/`, `storage/app/public/`, `public/storage/`, dan `Storage::get()` pada berkas [`App\Http\Controllers\LogbookCetakPdfController.php`](file:///c:/SystemMonitoringPPL/app/Http/Controllers/LogbookCetakPdfController.php#L47).
-- **Hasil**: Foto dokumentasi logbook harian kini otomatis tampil sempurna pada sel/kolom **Bukti Foto** di dalam tabel berkas PDF.
+### 1. Penyebab Nama PIC Mitra Kosong
+Sebelumnya, template PDF memanggil data `$kelompok->mitra->pic_nama`. Namun di sistem master data mitra dan akun pengguna (`/admin/users/pic`), akun Pembimbing / PIC Mitra dikelola secara dinamis pada tabel `users` (dengan `role = 'pic_mitra'`) yang terhubung via relasi `pic_user_id` pada tabel `mitra`.
 
-### 2. ✍️ Penyelarasan Teks & Data Lembar Pengesahan (`resources/views/pdf/laporan-logbook.blade.php`)
-- **Pengesahan Sebelah Kiri (Mitra)**:
-  - Teks diubah menjadi:
-    > **Mengetahui,**  
-    > **Pembimbing / PIC Mitra**  
-    > **( Nama PIC )**
-  - Baris NIP/ID mitra telah dihapus sesuai permintaan.
-- **Pengesahan Sebelah Kanan (DPL)**:
-  - Format tanggal: `Kuningan, [Tanggal]`
-  - Menampilkan nama lengkap DPL: `( Nama DPL )`
-  - Perbaikan kolom NIP / NIDN: mengambil data atribut `$kelompok->dpl->nip_nidn` (dengan fallback ke `username`), sehingga nomor NIP/NIDN DPL kini tampil dengan benar di file PDF.
+### 2. Solusi Perbaikan
+1. **Eager Loading Relasi (`LogbookCetakPdfController.php`)**:
+   Memuat relasi `mitra.picUser` secara otomatis:
+   ```php
+   $kelompok->load(['mitra.picUser', 'dpl', 'ketua', 'anggota']);
+   ```
+2. **Pengambilan Nama PIC pada Template PDF (`pdf/laporan-logbook.blade.php`)**:
+   Mengambil data nama lengkap dari relasi akun `picUser`:
+   ```blade
+   <strong>( {{ $kelompok->mitra->picUser->nama_lengkap ?? '...................................................' }} )</strong>
+   ```
 
 ---
 
@@ -35,11 +34,11 @@ PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
 ...............................................................  70 / 70 (100%)
 
-Time: 00:07.704, Memory: 38.50 MB
+Time: 00:07.653, Memory: 38.50 MB
 
 OK (70 tests, 216 assertions)
 ```
 
 - **Total Test Suite**: 70 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `ecaba6c`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `e66a4e2`).
