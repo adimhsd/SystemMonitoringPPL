@@ -135,11 +135,20 @@
 <body>
 
     <!-- Header Kop Surat -->
-    <div class="header-kop">
-        <h3>FAKULTAS EKONOMI DAN BISNIS</h3>
-        <h4>UNIVERSITAS KUNINGAN</h4>
-        <p>Jl. Cut Nyak Dhien No. 36A Cijoho, Kuningan, Jawa Barat 45513 | Email: feb@uniku.ac.id</p>
-    </div>
+    <table style="width: 100%; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 15px;">
+        <tr>
+            <td style="width: 15%; text-align: center; vertical-align: middle;">
+                @if(isset($logoUnikuBase64) && $logoUnikuBase64)
+                    <img src="{{ $logoUnikuBase64 }}" style="max-height: 65px; width: auto;" alt="Logo UNIKU">
+                @endif
+            </td>
+            <td style="width: 85%; text-align: center; vertical-align: middle;">
+                <h3 style="margin: 0; font-size: 14pt; font-weight: bold; color: #0f172a; text-transform: uppercase;">FAKULTAS EKONOMI DAN BISNIS</h3>
+                <h4 style="margin: 3px 0 0 0; font-size: 11pt; font-weight: normal; color: #334155;">UNIVERSITAS KUNINGAN</h4>
+                <p style="margin: 2px 0 0 0; font-size: 8pt; color: #64748b;">Jl. Cut Nyak Dhien No. 36A Cijoho, Kuningan, Jawa Barat 45513 | Email: feb@uniku.ac.id</p>
+            </td>
+        </tr>
+    </table>
 
     <div class="title-doc">
         <h5>LAPORAN LOGBOOK KEGIATAN HARIAN MAGANG PPL</h5>

@@ -74,9 +74,16 @@ class LogbookCetakPdfController extends Controller
             }
         }
 
+        $logoPath = public_path('images/logo-uniku.png');
+        $logoUnikuBase64 = null;
+        if (file_exists($logoPath)) {
+            $logoUnikuBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
         $pdf = Pdf::loadView('pdf.laporan-logbook', [
             'kelompok' => $kelompok,
             'logbookList' => $logbookList,
+            'logoUnikuBase64' => $logoUnikuBase64,
             'tglCetak' => now()->translatedFormat('d F Y'),
         ])->setPaper('a4', 'portrait');
 

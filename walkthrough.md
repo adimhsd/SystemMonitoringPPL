@@ -1,20 +1,22 @@
-# Walkthrough Implementation — Penambahan Nama Pembimbing PIC Mitra pada Header PDF Logbook
+# Walkthrough Implementation — Perbaikan Karakter Emoji PDF DOMPDF
 
-Penambahan informasi **Pembimbing PIC Mitra** pada tabel metadata header berkas PDF Logbook (sebelum tabel laporan kegiatan) telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Pembaruan penggantian karakter emoji UTF-8 dengan **Entity Bullet HTML (`&bull;`)** dan teks standar pada berkas PDF Logbook telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🚀 Perubahan yang Diterapkan
+## 🛠️ Penyebab & Perbaikan Karakter `?` pada PDF
 
-### 📝 Tabel Metadata Header PDF (`resources/views/pdf/laporan-logbook.blade.php`)
-Tabel metadata di bagian atas laporan PDF sebelum daftar kegiatan harian kini disusun lengkap secara simetris:
+### 1. Penyebab Tanda Tanya (`?`)
+Mesin render DOMPDF menggunakan font bawaan standar (*Helvetica / Times-Roman*). Font bawaan tersebut tidak memiliki peta karakter glyph untuk emoji UTF-8 seperti `🕒` (jam), `⚠️` (peringatan), dan `✓` (check mark), sehingga DOMPDF otomatis menampilkan tanda tanya (`?`) pada PDF.
 
-| Baris | Kolom Kiri | Kolom Kanan |
-| :--- | :--- | :--- |
-| **Baris 1** | **Nama Kelompok**: `[Nama Kelompok]` | **DPL Fakultas**: `[Nama DPL]` |
-| **Baris 2** | **Instansi Mitra**: `[Nama Instansi]` | **Pembimbing PIC Mitra**: `[Nama PIC Mitra]` |
-| **Baris 3** | **Alamat Mitra**: `[Alamat Instansi]` | **Ketua Kelompok**: `[Nama Ketua]` |
-| **Baris 4** | **Jumlah Anggota**: `[X Mahasiswa]` | **Tahun Akademik**: `[Tahun Akademik]` |
+### 2. Solusi Perbaikan (`resources/views/pdf/laporan-logbook.blade.php`)
+1. **Status Approval**: Mengganti emoji `✓` dengan simbol bullet standar HTML `&bull;`:
+   - `• Approved PIC Mitra`
+   - `• Approved DPL`
+2. **Jam & Waktu**: Mengganti emoji `🕒` dengan label teks yang bersih:
+   - `Jam 08:00 - 16:00 WIB`
+3. **Status Terlambat**: Mengganti emoji `⚠️` dengan label teks:
+   - `(Terlambat)`
 
 ---
 
@@ -29,11 +31,11 @@ PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
 ...............................................................  70 / 70 (100%)
 
-Time: 00:07.298, Memory: 38.50 MB
+Time: 00:07.983, Memory: 38.50 MB
 
 OK (70 tests, 216 assertions)
 ```
 
 - **Total Test Suite**: 70 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `59c6ff2`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `bc69c8d`).
