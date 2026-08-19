@@ -200,10 +200,10 @@
                     <td>
                         <strong>{{ $logbook->tanggal->format('d/m/Y') }}</strong><br>
                         <span style="font-size: 8pt; color: #64748b;">
-                            🕒 {{ \Carbon\Carbon::parse($logbook->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($logbook->waktu_selesai)->format('H:i') }} WIB
+                            Jam {{ \Carbon\Carbon::parse($logbook->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($logbook->waktu_selesai)->format('H:i') }} WIB
                         </span>
                         @if($logbook->terlambat)
-                            <br><span style="color: #d97706; font-size: 7.5pt; font-weight: bold;">⚠️ Terlambat</span>
+                            <br><span style="color: #d97706; font-size: 7.5pt; font-weight: bold;">(Terlambat)</span>
                         @endif
                     </td>
                     <td>
@@ -219,16 +219,16 @@
                     <td>
                         <div style="margin-bottom: 4px;">
                             @if($logbook->dilihat_mitra)
-                                <span class="badge-status badge-success">✓ Approved PIC Mitra</span>
+                                <span class="badge-status badge-success">&bull; Approved PIC Mitra</span>
                             @else
-                                <span class="badge-status badge-warning">Belum Di-Approve Mitra</span>
+                                <span class="badge-status badge-warning">&bull; Belum Di-Approve Mitra</span>
                             @endif
                         </div>
                         <div>
                             @if($logbook->dilihat_dpl)
-                                <span class="badge-status badge-success">✓ Approved DPL</span>
+                                <span class="badge-status badge-success">&bull; Approved DPL</span>
                             @else
-                                <span class="badge-status badge-warning">Belum Di-Approve DPL</span>
+                                <span class="badge-status badge-warning">&bull; Belum Di-Approve DPL</span>
                             @endif
                         </div>
                     </td>
