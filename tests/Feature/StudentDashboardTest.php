@@ -60,4 +60,24 @@ class StudentDashboardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Kelompok Dashboard Test');
     }
+
+    public function test_student_can_view_logbook_detail_page(): void
+    {
+        $logbook = \App\Models\KegiatanHarian::create([
+            'kelompok_id' => $this->kelompok->id,
+            'tanggal' => now()->format('Y-m-d'),
+            'waktu_mulai' => '08:00',
+            'waktu_selesai' => '16:00',
+            'deskripsi_kegiatan' => 'Kegiatan magang harian untuk tes detail.',
+            'foto_dokumentasi' => 'logbook/foto_test.jpg',
+            'terlambat' => false,
+            'dilihat_mitra' => false,
+            'dilihat_dpl' => false,
+        ]);
+
+        $response = $this->actingAs($this->ketuaUser)->get("/ketua/logbook/{$logbook->id}");
+
+        $response->assertStatus(200);
+        $response->assertSee('Kegiatan magang harian untuk tes detail.');
+    }
 }

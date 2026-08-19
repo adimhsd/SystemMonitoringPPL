@@ -113,6 +113,23 @@ class LogbookController extends Controller
     }
 
     /**
+     * Detail Logbook Harian Kelompok.
+     */
+    public function show(KegiatanHarian $logbook)
+    {
+        $ketua = Auth::user();
+        $kelompok = KelompokPpl::where('ketua_user_id', $ketua->id)->firstOrFail();
+
+        if ($logbook->kelompok_id !== $kelompok->id) {
+            abort(403, 'Akses ditolak. Logbook ini bukan milik kelompok Anda.');
+        }
+
+        $logbook->load(['kelompok.mitra.picUser', 'kelompok.dpl']);
+
+        return view('ketua.logbook.show', compact('kelompok', 'logbook'));
+    }
+
+    /**
      * Form Edit Logbook Harian.
      */
     public function edit(KegiatanHarian $logbook)
