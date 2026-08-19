@@ -1,29 +1,33 @@
-# Walkthrough Implementation — Perbaikan Bug Query Logbook PDF Ketua Kelompok
+# Walkthrough Implementation — Perbaikan Tampilan Foto & Penyelarasan Pengesahan PDF Logbook
 
-Perbaikan error SQL `Unknown column 'user_id' in 'where clause'` saat Ketua Kelompok mengunduh PDF Logbook Kegiatan Harian (`/ketua/logbook-pdf`) telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Pembaruan pencarian **Foto Dokumentasi Logbook (Base64 Multi-Path)** serta penyelarasan **Teks Lembar Pengesahan PDF** telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🛠️ Penyebab Error & Solusi Perbaikan
+## 🚀 Perubahan yang Diterapkan
 
-### 1. Penyebab Error
-Pada berkas [`App\Http\Controllers\LogbookCetakPdfController.php`](file:///c:/SystemMonitoringPPL/app/Http/Controllers/LogbookCetakPdfController.php#L23), pencarian kelompok PPL untuk role `ketua_kelompok` mencoba melakukan *subquery* `orWhereHas('anggota', fn($q) => $q->where('user_id', ...))`. Namun tabel `anggota_kelompok` (model `Mahasiswa`) tidak memiliki kolom `user_id`, karena akun kelompok bersifat independen dengan kunci `ketua_user_id` pada tabel `kelompok_ppl`.
+### 1. 📷 Perbaikan Penampil Foto Dokumentasi Logbook
+- **Solusi Multi-Path**: Menambahkan logika fallback pencarian lokasi file foto pada `storage/app/private/`, `storage/app/`, `storage/app/public/`, `public/storage/`, dan `Storage::get()` pada berkas [`App\Http\Controllers\LogbookCetakPdfController.php`](file:///c:/SystemMonitoringPPL/app/Http/Controllers/LogbookCetakPdfController.php#L47).
+- **Hasil**: Foto dokumentasi logbook harian kini otomatis tampil sempurna pada sel/kolom **Bukti Foto** di dalam tabel berkas PDF.
 
-### 2. Solusi Perbaikan
-Mengubah kueri pencarian kelompok pada `LogbookCetakPdfController` menjadi langsung dan presisi berdasarkan `ketua_user_id`:
-
-```php
-if ($user->role === 'ketua_kelompok') {
-    $kelompok = KelompokPpl::where('ketua_user_id', $user->id)->first();
-}
-```
+### 2. ✍️ Penyelarasan Teks & Data Lembar Pengesahan (`resources/views/pdf/laporan-logbook.blade.php`)
+- **Pengesahan Sebelah Kiri (Mitra)**:
+  - Teks diubah menjadi:
+    > **Mengetahui,**  
+    > **Pembimbing / PIC Mitra**  
+    > **( Nama PIC )**
+  - Baris NIP/ID mitra telah dihapus sesuai permintaan.
+- **Pengesahan Sebelah Kanan (DPL)**:
+  - Format tanggal: `Kuningan, [Tanggal]`
+  - Menampilkan nama lengkap DPL: `( Nama DPL )`
+  - Perbaikan kolom NIP / NIDN: mengambil data atribut `$kelompok->dpl->nip_nidn` (dengan fallback ke `username`), sehingga nomor NIP/NIDN DPL kini tampil dengan benar di file PDF.
 
 ---
 
 ## 🧪 Hasil Automated Unit & Feature Tests
 
 ```bash
-vendor/bin/phpunit tests/Feature/LogbookCetakPdfTest.php
+vendor/bin/phpunit
 ```
 
 ```
@@ -31,11 +35,11 @@ PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
 ...............................................................  70 / 70 (100%)
 
-Time: 00:08.063, Memory: 38.50 MB
+Time: 00:07.704, Memory: 38.50 MB
 
 OK (70 tests, 216 assertions)
 ```
 
 - **Total Test Suite**: 70 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `a2db336`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `ecaba6c`).

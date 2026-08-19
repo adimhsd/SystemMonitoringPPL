@@ -241,7 +241,7 @@
                     Mengetahui,<br>
                     <strong>Pembimbing / PIC Mitra</strong>
                     <div class="signature-space"></div>
-                    <strong>( {{ $kelompok->mitra->pic_nama ?? '...................................................' }} )</strong>
+                    <strong>( {{ $kelompok->mitra->picUser->nama_lengkap ?? $kelompok->mitra->pic_nama ?? '...................................................' }} )</strong>
                 </td>
                 <td>
                     Kuningan, {{ $tglCetak }}<br>

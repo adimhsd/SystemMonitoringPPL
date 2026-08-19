@@ -37,7 +37,7 @@ class LogbookCetakPdfController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        $kelompok->load(['mitra', 'dpl', 'ketua', 'anggota']);
+        $kelompok->load(['mitra.picUser', 'dpl', 'ketua', 'anggota']);
 
         $logbookList = KegiatanHarian::where('kelompok_id', $kelompok->id)
             ->orderBy('tanggal', 'asc')

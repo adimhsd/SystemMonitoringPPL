@@ -51,9 +51,19 @@ class LogbookCetakPdfTest extends TestCase
             'is_active' => true,
         ]);
 
+        $picUser = User::create([
+            'username' => 'pic_test_pdf',
+            'password' => Hash::make('password'),
+            'role' => 'pic_mitra',
+            'nama_lengkap' => 'PIC Mitra Test PDF',
+            'must_change_password' => false,
+            'is_active' => true,
+        ]);
+
         $mitra = Mitra::create([
             'nama_mitra' => 'Instansi Mitra Test PDF',
             'kategori' => 'SKPD',
+            'pic_user_id' => $picUser->id,
         ]);
 
         $this->kelompok = KelompokPpl::create([
