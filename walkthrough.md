@@ -1,26 +1,37 @@
-# Walkthrough Implementation — Perbaikan Halaman Ubah Password Akun
+# Walkthrough Implementation — Perbaikan Tombol & Redesain Dashboard DPL Pembimbing
 
-Perbaikan menu **`🔑 Ubah Password`** pada dropdown profil pengguna (`/change-password-form`) untuk semua role (khususnya akun Ketua Kelompok / Mahasiswa) telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Perbaikan tombol **`Lihat Logbook`** serta **Redesain Dashboard DPL Pembimbing (`/dpl/dashboard`)** menjadi jauh lebih informatif, interaktif, dan terintegrasi telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🛠️ Penyebab & Perbaikan Bug
+## 🚀 Perubahan yang Diterapkan
 
-### 1. Penyebab Error
-Pada berkas `routes/web.php`, route `/change-password-form` dan `/change-password` memanggil `[ProfileController::class, 'showChangePasswordForm']`. Namun controller `ProfileController` tidak ada (karena handler ganti password berada di dalam `App\Http\Controllers\Auth\AuthController.php` / `AuthenticatedSessionController`), sehingga menyebabkan error 500 (*Target class ProfileController does not exist*).
+### 1. 🛠️ Perbaikan Tombol Aksi yang Tidak Berfungsi
+- Mengganti tautan mati `href="#"` pada berkas [`resources/views/dpl/dashboard.blade.php`](file:///c:/SystemMonitoringPPL/resources/views/dpl/dashboard.blade.php) dengan route Laravel resmi:
+  - Tombol **`📘 Lihat Logbook`** (per kelompok) $\rightarrow$ `route('dpl.logbook.index', ['kelompok_id' => $kelompok->id])`
+  - Tombol **`📝 Penilaian`** $\rightarrow$ `route('dpl.penilaian.edit', $kelompok)`
+  - Tombol **`📄 PDF`** $\rightarrow$ `route('dpl.logbook.pdf', $kelompok)`
 
-### 2. Solusi Perbaikan
-1. **Pembaruan Route Target (`routes/web.php`)**:
-   Mengarahkan route pengubah password ke `AuthenticatedSessionController` (`AuthController`):
-   ```php
-   Route::get('/change-password', [AuthenticatedSessionController::class, 'showChangePasswordForm'])->name('password.change');
-   Route::get('/change-password-form', [AuthenticatedSessionController::class, 'showChangePasswordForm'])->name('password.change.form');
-   Route::post('/change-password', [AuthenticatedSessionController::class, 'updatePassword'])->name('password.change.update');
-   Route::post('/update-password', [AuthenticatedSessionController::class, 'updatePassword'])->name('password.update');
-   ```
-2. **Pembaruan Form Action (`resources/views/auth/change-password.blade.php`)**:
-   - Menyelaraskan form action ke `route('password.change.update')`.
-   - Menambahkan tombol *&larr; Batal / Kembali* jika penggantian password dilakukan secara mandiri dari dropdown profil.
+### 2. 📊 Redesain Dashboard DPL Pembimbing (Lebih Komprehensif & Informatif)
+
+Dashboard DPL (`/dpl/dashboard`) kini dilengkapi dengan berbagai widget informasi dan laporan real-time:
+
+1. **Header Profile Banner**:
+   - Menampilkan Nama DPL, NIP/NIDN, serta Badge Indikator Beban Bimbingan Mahasiswa (`👥 X / Maks 10 Mahasiswa`).
+2. **Widget Alert Logbook Menunggu Approval DPL**:
+   - **Kondisi Ada Logbook Pending**: Banner peringatan interaktif warna kuning (*⚠️ Ada X Logbook Harian Menunggu Approval Anda*) + Tombol instant *⚡ Review & Approve Logbook*.
+   - **Kondisi Semua Logbook Clear**: Banner konfirmasi warna hijau (*✅ Semua Logbook Bimbingan Sudah Di-Approve*).
+3. **Executive Summary Metric Cards (4 Card Metrics)**:
+   - **Kelompok Bimbingan**: Jumlah kelompok PPL aktif yang dibimbing DPL.
+   - **Total Mahasiswa**: Jumlah total mahasiswa yang menjadi tanggung jawab DPL.
+   - **Pending Approval**: Jumlah entri logbook yang belum diverifikasi oleh DPL ini.
+   - **Penilaian DPL (40%)**: Jumlah & persentase kelompok yang sudah diselesaikan penilaiannya oleh DPL.
+4. **Kartu Kelompok Bimbingan Interaktif (Interactive Group Cards)**:
+   - Menampilkan Nama Kelompok, Tahun Akademik, Instansi Mitra, Nama Pembimbing PIC Mitra, Ketua Kelompok, dan Jumlah Mahasiswa.
+   - **Progress Status Badge**: Total logbook kelompok, status approval DPL, dan status penilaian DPL.
+   - **3 Tombol Aksi Cepat**: `📘 Lihat Logbook`, `📝 Penilaian`, dan `📄 PDF`.
+5. **Tabel Logbook Menunggu Approval DPL Terbaru**:
+   - Menampilkan 5 entri kegiatan harian terbaru dari mahasiswa bimbingan yang membutuhkan approval DPL, lengkap dengan tombol instant *Detail & Approve*.
 
 ---
 
@@ -33,13 +44,13 @@ vendor/bin/phpunit
 ```
 PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
-...............................................................  78 / 78 (100%)
+...............................................................  79 / 79 (100%)
 
-Time: 00:07.662, Memory: 38.50 MB
+Time: 00:09.734, Memory: 38.50 MB
 
-OK (78 tests, 232 assertions)
+OK (79 tests, 235 assertions)
 ```
 
-- **Total Test Suite**: 78 Test Cases
+- **Total Test Suite**: 79 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `ee2c5a8`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `72dff8a`).

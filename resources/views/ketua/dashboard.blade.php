@@ -192,7 +192,7 @@
                     </tr>
                     <tr>
                         <td class="text-muted">NIP / NIDN</td>
-                        <td class="text-dark">: <code>{{ $kelompok->dpl->nip_nidn ?? $kelompok->dpl->username ?? '-' }}</code></td>
+                        <td class="text-dark">: {{ $kelompok->dpl->nip_nidn ?? $kelompok->dpl->username ?? '-' }}</td>
                     </tr>
                     <tr>
                         <td class="text-muted">Kontak WhatsApp</td>

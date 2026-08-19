@@ -50,7 +50,7 @@
                         <td class="ps-4">
                             <div class="fw-bold text-dark">👨‍🏫 {{ $u->nama_lengkap }}</div>
                         </td>
-                        <td><code>{{ $u->nip_nidn ?? '-' }}</code></td>
+                        <td>{{ $u->nip_nidn ?? '-' }}</td>
                         <td><code>{{ $u->username }}</code></td>
                         <td>
                             <div class="fw-semibold text-dark">{{ $u->no_hp ?? '-' }}</div>

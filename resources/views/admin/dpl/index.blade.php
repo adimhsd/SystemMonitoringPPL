@@ -52,7 +52,7 @@
                     <tr>
                         <td class="ps-4">
                             <div class="fw-bold text-dark">👨‍🏫 {{ $dpl->nama_lengkap }}</div>
-                            <div class="text-muted fs-8">NIP/NIDN: <code>{{ $dpl->nip_nidn ?? '-' }}</code></div>
+                            <div class="text-muted fs-8">NIP/NIDN: {{ $dpl->nip_nidn ?? '-' }}</div>
                         </td>
                         <td><code>{{ $dpl->username }}</code></td>
                         <td>

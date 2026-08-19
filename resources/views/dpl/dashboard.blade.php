@@ -13,7 +13,7 @@
             </span>
             <h3 class="fw-bold mb-1">Selamat Datang, {{ $dpl->nama_lengkap }}</h3>
             <p class="text-white-50 mb-0 fs-7">
-                NIP / NIDN: <code>{{ $dpl->nip_nidn ?? $dpl->username }}</code> | Unit Kerja: Fakultas Ekonomi dan Bisnis Universitas Kuningan
+                NIP / NIDN: {{ $dpl->nip_nidn ?? $dpl->username }} | Unit Kerja: Fakultas Ekonomi dan Bisnis Universitas Kuningan
             </p>
         </div>
         <div class="col-12 col-lg-4 text-lg-end">
