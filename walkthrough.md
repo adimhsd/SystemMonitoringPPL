@@ -1,14 +1,19 @@
-# Walkthrough Implementation — Penambahan Logo UNIKU pada Kop Surat PDF Logbook
+# Walkthrough Implementation — Perbaikan Error Column 'status_kerja_sama' pada Menu Plotting & Kelompok
 
-Penambahan **Logo Universitas Kuningan (UNIKU) transparan** di samping kiri Kop Surat pada dokumen PDF Logbook telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Perbaikan error SQL `Unknown column 'status_kerja_sama' in 'where clause'` pada saat mengakses menu Edit Plotting (`/admin/plotting/{kelompok}/edit`) dan Tambah Kelompok (`/admin/kelompok/create`) telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🚀 Perubahan yang Diterapkan
+## 🛠️ Penyebab & Perbaikan Bug
 
-### 🖼️ Kop Surat Resmi PDF dengan Logo UNIKU (`resources/views/pdf/laporan-logbook.blade.php`)
-- **Struktur 2 Kolom**: Menyusun Kop Surat menggunakan tabel 2 kolom yang presisi (Kolom Kiri `15%` untuk Logo UNIKU, Kolom Kanan `85%` untuk Teks Kop Fakultas).
-- **Format Base64 Image**: Mengodekan berkas logo `public/images/logo-uniku.png` menjadi Base64 URI pada `LogbookCetakPdfController.php` sehingga logo dijamin tampil bersih dan jernih di semua PDF viewer tanpa kendala path lokal.
+### 1. Penyebab Error
+Pada `Admin\PlottingController.php` (method `create` & `edit`) serta `Admin\KelompokController.php` (method `create`), kueri untuk mengambil daftar Mitra menggunakan filter `Mitra::where('status_kerja_sama', 'aktif')`. Namun pada struktur tabel `mitra`, kolom `status_kerja_sama` tidak ada/sudah disederhanakan, sehingga menyebabkan perkondisian `WHERE` gagal saat query MySQL dijalankan.
+
+### 2. Solusi Perbaikan
+Mengubah pengambilan daftar Mitra di kedua controller menjadi terurut berdasarkan nama mitra:
+```php
+$mitraList = Mitra::orderBy('nama_mitra')->get();
+```
 
 ---
 
@@ -21,13 +26,13 @@ vendor/bin/phpunit
 ```
 PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
-...............................................................  70 / 70 (100%)
+...............................................................  73 / 73 (100%)
 
-Time: 00:08.281, Memory: 38.50 MB
+Time: 00:08.297, Memory: 38.50 MB
 
-OK (70 tests, 216 assertions)
+OK (73 tests, 220 assertions)
 ```
 
-- **Total Test Suite**: 70 Test Cases
+- **Total Test Suite**: 73 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `f4b755a`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `3c4980e`).
