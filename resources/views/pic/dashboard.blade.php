@@ -132,7 +132,7 @@
             <div class="card card-custom p-4 h-100">
                 <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
                     <span class="fs-5">👥</span>
-                    <h6 class="fw-bold mb-0 text-dark">Informasi Kelompok & Ketua Magang</h6>
+                    <h6 class="fw-bold mb-0 text-dark">Informasi Kelompok Magang</h6>
                 </div>
                 <table class="table table-borderless table-sm mb-0 fs-7">
                     <tr>
@@ -140,20 +140,8 @@
                         <td class="fw-bold text-dark">: {{ $kelompok->nama_kelompok }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted">Ketua Kelompok</td>
-                        <td class="fw-semibold text-primary">: {{ $kelompok->ketua->nama_lengkap ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-muted">Kontak Ketua</td>
-                        <td>: 
-                            @if($kelompok->ketua->no_hp ?? false)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $kelompok->ketua->no_hp) }}" target="_blank" class="text-decoration-none fw-semibold text-success fs-8">
-                                    💬 {{ $kelompok->ketua->no_hp }} (WhatsApp)
-                                </a>
-                            @else
-                                <span class="text-muted fs-8">-</span>
-                            @endif
-                        </td>
+                        <td class="text-muted">Username Akun</td>
+                        <td class="fw-semibold text-primary">: {{ $kelompok->ketua->username ?? '-' }}</td>
                     </tr>
                     <tr>
                         <td class="text-muted">Jumlah Anggota</td>

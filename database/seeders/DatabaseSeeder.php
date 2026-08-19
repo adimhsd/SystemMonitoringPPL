@@ -123,12 +123,12 @@ class DatabaseSeeder extends Seeder
             'pic_user_id' => $pic3->id,
         ]);
 
-        // 4. Ketua Kelompok & Kelompok PPL
+        // 4. Akun Kelompok & Kelompok PPL
         $ketua1 = User::create([
             'username' => 'ketua1',
             'password' => $password,
             'role' => 'ketua_kelompok',
-            'nama_lengkap' => 'Rizky Pratama',
+            'nama_lengkap' => 'Kelompok 01 - BAPPEDA',
             'no_hp' => '087711223344',
             'nip_nidn' => null,
             'must_change_password' => false,
@@ -167,7 +167,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'ketua2',
             'password' => $password,
             'role' => 'ketua_kelompok',
-            'nama_lengkap' => 'Siti Nurhaliza',
+            'nama_lengkap' => 'Kelompok 02 - PT Tirta Utama',
             'no_hp' => '087722334455',
             'nip_nidn' => null,
             'must_change_password' => false,
@@ -206,7 +206,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'ketua3',
             'password' => $password,
             'role' => 'ketua_kelompok',
-            'nama_lengkap' => 'Andi Wijaya',
+            'nama_lengkap' => 'Kelompok 03 - UMKM Kopi Luwak',
             'no_hp' => '087733445566',
             'nip_nidn' => null,
             'must_change_password' => false,

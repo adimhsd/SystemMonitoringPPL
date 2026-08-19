@@ -45,16 +45,12 @@
         </div>
     </div>
 
-    <!-- Card Ketua -->
+    <!-- Card Akun Login -->
     <div class="col-12 col-md-4">
         <div class="card card-custom p-3 h-100 border-start border-4 border-warning">
-            <h6 class="fw-bold text-muted fs-7 mb-2 text-uppercase">Ketua Kelompok (Akun Login)</h6>
-            <h5 class="fw-bold text-dark mb-1">👑 {{ $kelompok->ketua->nama_lengkap }}</h5>
+            <h6 class="fw-bold text-muted fs-7 mb-2 text-uppercase">Akun Login Kelompok PPL</h6>
+            <h5 class="fw-bold text-dark mb-1">🔑 {{ $kelompok->nama_kelompok }}</h5>
             <p class="text-secondary fs-7 mb-2">Username: <strong>{{ $kelompok->ketua->username }}</strong></p>
-            <hr class="my-2">
-            <p class="text-secondary fs-7 mb-0">
-                📞 <strong>No HP:</strong> {{ $kelompok->ketua->no_hp ?? '-' }}
-            </p>
         </div>
     </div>
 </div>

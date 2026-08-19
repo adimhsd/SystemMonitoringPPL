@@ -135,7 +135,7 @@
                     <div class="fs-7 text-secondary mb-3">
                         <div class="mb-1">🏢 <strong>Mitra:</strong> {{ $kelompok->mitra->nama_mitra ?? '-' }} ({{ $kelompok->mitra->kategori ?? '-' }})</div>
                         <div class="mb-1">👨‍💼 <strong>PIC Mitra:</strong> {{ $kelompok->mitra->picUser->nama_lengkap ?? '-' }}</div>
-                        <div class="mb-1">👤 <strong>Ketua:</strong> {{ $kelompok->ketua->nama_lengkap ?? '-' }}</div>
+                        <div class="mb-1">👤 <strong>Akun:</strong> {{ $kelompok->ketua->username ?? '-' }}</div>
                         <div>👥 <strong>Anggota:</strong> {{ $kelompok->anggota->count() }} Mahasiswa</div>
                     </div>
 

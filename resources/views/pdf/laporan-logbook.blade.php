@@ -177,9 +177,9 @@
             <td class="label">Alamat Mitra</td>
             <td class="colon">:</td>
             <td>{{ $kelompok->mitra->alamat ?? '-' }}</td>
-            <td class="label">Ketua Kelompok</td>
+            <td class="label">Username Akun</td>
             <td class="colon">:</td>
-            <td>{{ $kelompok->ketua->nama_lengkap ?? '-' }}</td>
+            <td>{{ $kelompok->ketua->username ?? '-' }}</td>
         </tr>
         <tr>
             <td class="label">Jumlah Anggota</td>
