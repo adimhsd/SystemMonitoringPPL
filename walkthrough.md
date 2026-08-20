@@ -1,23 +1,29 @@
-# Walkthrough Implementation — Impor File Excel Master Data DPL
+# Walkthrough Implementation — Penyelarasan Format & Fitur Download Template Excel DPL
 
-Proses Impor Berkas Excel **`data-master/Master_Data_DPL_PPL.xlsx`** ke dalam database sistem telah **SELESAI DILAKUKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Fitur **Download Template Excel Impor Data DPL** serta penyelarasan format kolom **Impor** dan **Ekspor** Data Dosen Pembimbing Lapangan (DPL) telah **SELESAI DITERAPKAN, DITERUJI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🚀 Perubahan & Hasil Impor
+## 🛠️ Ringkasan Perubahan & Fitur Baru
 
-1. **Hasil Impor Data DPL**:
-   - Seluruh **41 Data Dosen Pembimbing Lapangan (DPL)** dari berkas [`data-master/Master_Data_DPL_PPL.xlsx`](file:///c:/SystemMonitoringPPL/data-master/Master_Data_DPL_PPL.xlsx) telah **berhasil diimpor ke dalam database** (`users` table dengan `role = 'dpl'`).
-   - Termasuk akun `DPL_PPL41` (Dendi Purnama, SE., M.Si) yang sebelumnya mengalami kendala *soft-deleted constraint*.
+1. **Class Template Unduhan (`App\Exports\DplTemplateExport.php`)**:
+   - Dibuat class export khusus [`DplTemplateExport.php`](file:///c:/SystemMonitoringPPL/app/Exports/DplTemplateExport.php) untuk mengunduh template Excel resmi impor DPL.
+   - **Header Kolom Resmi Impor**:
+     `ID DPL | Username | Password | NIP / NIDN | Nama Lengkap DPL | No HP / Whatsapp | Email | Status Akun`
+   - Menyediakan 2 baris data contoh (*sample data rows*) untuk memandu pengguna saat mengisi data.
 
-2. **Ringkasan Akun DPL di Database**:
-   - **Total DPL Aktif**: **41 DPL** (DPL_PPL01 s.d. DPL_PPL41).
-   - **Default Password**: `password123` (Setiap DPL akan diminta mengubah password saat pertama kali login).
+2. **Tombol UI Download Template (`admin/dpl/index.blade.php`)**:
+   - Menambahkan tombol **`📄 Download Template Excel`** di samping tombol `+ Tambah DPL Baru`, `📥 Impor Excel`, dan `📊 Export Excel`.
+   - Menambahkan tautan unduh template resmi di dalam Modal Impor Excel DPL beserta urutan kolomnya.
+
+3. **Routing & Controller (`routes/web.php` & `DplController.php`)**:
+   - Menambahkan route `GET /admin/dpl/template` (`admin.dpl.template`).
+   - Menambahkan method `downloadTemplate()` di `DplController.php` yang mengunduh berkas `Template_Import_DPL_PPL.xlsx`.
 
 ---
 
 ## 🧪 Hasil Automated Unit & Feature Tests
 
-- **Total Test Suite**: 90 Test Cases
-- **Hasil**: `90 tests, 267 assertions` — **PASSED 100%**.
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `baedb21`).
+- **Test Class Khusus**: [`tests/Feature/AdminDplTemplateTest.php`](file:///c:/SystemMonitoringPPL/tests/Feature/AdminDplTemplateTest.php)
+- **Status Pengujian**: `92 tests, 275 assertions` — **PASSED 100%**.
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `9e2297d`).

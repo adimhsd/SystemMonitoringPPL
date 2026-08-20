@@ -45,7 +45,25 @@ class DplController extends Controller
             $dpl->total_bimbingan_mhs = $totalMhs;
         }
 
-        return view('admin.dpl.index', compact('dplList'));
+        // Ringkasan Statistik Data DPL
+        $totalDpl = User::where('role', 'dpl')->count();
+        $totalBimbinganMhs = KelompokPpl::where('status', 'aktif')->withCount('anggota')->get()->sum('anggota_count');
+        $avgBimbingan = $totalDpl > 0 ? round($totalBimbinganMhs / $totalDpl, 1) : 0;
+
+        $statsSummary = [
+            'total_dpl' => $totalDpl,
+            'dpl_aktif' => User::where('role', 'dpl')->where('is_active', true)->count(),
+            'dpl_nonaktif' => User::where('role', 'dpl')->where('is_active', false)->count(),
+            'dpl_assigned' => User::where('role', 'dpl')->whereHas('kelompokDpl')->count(),
+            'dpl_standby' => User::where('role', 'dpl')->doesntHave('kelompokDpl')->count(),
+            'total_bimbingan_mhs' => $totalBimbinganMhs,
+            'avg_bimbingan_per_dpl' => $avgBimbingan,
+            'dpl_dengan_nip' => User::where('role', 'dpl')->whereNotNull('nip_nidn')->where('nip_nidn', '!=', '-')->where('nip_nidn', '!=', '')->count(),
+            'dpl_dengan_wa' => User::where('role', 'dpl')->whereNotNull('no_hp')->where('no_hp', '!=', '-')->where('no_hp', '!=', '')->count(),
+            'dpl_dengan_email' => User::where('role', 'dpl')->whereNotNull('email')->where('email', '!=', '-')->where('email', '!=', '')->count(),
+        ];
+
+        return view('admin.dpl.index', compact('dplList', 'statsSummary'));
     }
 
     /**

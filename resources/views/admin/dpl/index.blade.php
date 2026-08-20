@@ -3,8 +3,8 @@
 @section('title', 'Master Data DPL (Dosen Pembimbing)')
 
 @section('content')
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
+<div class="mb-4">
+    <div class="mb-3">
         <h4 class="fw-bold mb-1">Master Data Dosen Pembimbing Lapangan (DPL)</h4>
         <p class="text-muted mb-0 fs-7">Kelola akun dan data DPL Fakultas, pemantauan beban mahasiswa bimbingan, serta fitur ekspor/impor Excel.</p>
     </div>
@@ -21,6 +21,76 @@
         <a href="{{ route('admin.dpl.export') }}" class="btn btn-outline-secondary btn-touch rounded-3 fw-semibold">
             📊 Export Excel
         </a>
+    </div>
+</div>
+
+<!-- Ringkasan Statistik Data DPL Header Cards -->
+<div class="row g-3 mb-4">
+    <!-- Stat Card 1: Total DPL & Status Akun -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-primary h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-primary fs-7 fw-bold">Total DPL Fakultas</span>
+                <span class="fs-4">👨‍🏫</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_dpl'] }} <span class="fs-6 text-muted font-normal">Dosen</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">✅ Aktif: {{ $statsSummary['dpl_aktif'] }}</span>
+                <span class="text-secondary fw-semibold">⚠️ Non-Aktif: {{ $statsSummary['dpl_nonaktif'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 2: Penugasan Kelompok PPL -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-success h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-success fs-7 fw-bold">Penugasan Kelompok</span>
+                <span class="fs-4">📌</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['dpl_assigned'] }} <span class="fs-6 text-muted font-normal">Active DPL</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-primary fw-semibold">👥 Membimbing: {{ $statsSummary['dpl_assigned'] }}</span>
+                <span class="text-warning fw-semibold">⏳ Standby: {{ $statsSummary['dpl_standby'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 3: Beban Bimbingan Mahasiswa -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-info h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-info fs-7 fw-bold">Total Mahasiswa Bimbingan</span>
+                <span class="fs-4">🎓</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_bimbingan_mhs'] }} <span class="fs-6 text-muted font-normal">Mahasiswa</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-info fw-semibold">📊 Rata-rata: {{ $statsSummary['avg_bimbingan_per_dpl'] }} Mhs/DPL</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 4: Kelengkapan Data & Kontak -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-warning h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-warning fs-7 fw-bold">Kelengkapan Identitas</span>
+                <span class="fs-4">📇</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['dpl_dengan_nip'] }} <span class="fs-6 text-muted font-normal">Terisi NIP</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">📱 WA: {{ $statsSummary['dpl_dengan_wa'] }}</span>
+                <span class="text-primary fw-semibold">📧 Email: {{ $statsSummary['dpl_dengan_email'] }}</span>
+            </div>
+        </div>
     </div>
 </div>
 
