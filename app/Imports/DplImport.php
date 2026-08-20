@@ -20,22 +20,9 @@ class DplImport implements ToModel, WithHeadingRow
         $nipNidn = trim((string) ($row['nip_nidn'] ?? $row['nip'] ?? $row['nidn'] ?? ''));
         $username = trim((string) ($row['username'] ?? ''));
 
-        // Jika baik nama maupun username/nip kosong, lewati baris ini
+        // Jika baik nama, username, maupun nip_nidn kosong, lewati baris ini
         if (empty($namaLengkap) && empty($username) && empty($nipNidn)) {
             return null;
-        }
-
-        // Generate username otomatis jika belum ada di Excel
-        if (empty($username)) {
-            if (!empty($nipNidn)) {
-                $username = 'dpl_' . preg_replace('/[^a-zA-Z0-9]/', '', $nipNidn);
-            } else {
-                $username = 'dpl_' . Str::slug($namaLengkap, '_');
-            }
-        }
-
-        if (empty($namaLengkap)) {
-            $namaLengkap = 'DPL ' . strtoupper($username);
         }
 
         $noHp = isset($row['no_hp_whatsapp']) ? trim((string) $row['no_hp_whatsapp']) : (isset($row['no_hp']) ? trim((string) $row['no_hp']) : null);
@@ -48,26 +35,58 @@ class DplImport implements ToModel, WithHeadingRow
         $statusInput = strtolower(trim((string) ($row['status_akun'] ?? $row['status'] ?? 'aktif')));
         $isActive = !in_array($statusInput, ['non-aktif', 'nonaktif', '0', 'false', 'disabled', 'inaktif']);
 
-        $user = User::where('role', 'dpl')
-            ->where(function ($q) use ($username, $nipNidn) {
-                $q->where('username', $username);
-                if (!empty($nipNidn)) {
-                    $q->orWhere('nip_nidn', $nipNidn);
-                }
-            })
-            ->first();
+        // 1. Cari user DPL yang sudah ada: prioritaskan NIP/NIDN (identitas akademik unik DPL), kemudian username
+        $user = null;
+        if (!empty($nipNidn) && $nipNidn !== '-') {
+            $user = User::where('role', 'dpl')->where('nip_nidn', $nipNidn)->first();
+        }
 
+        if (!$user && !empty($username)) {
+            $user = User::where('role', 'dpl')->where('username', $username)->first();
+        }
+
+        // 2. Jika user DPL sudah ditemukan, lakukan update secara aman
         if ($user) {
-            $user->update([
-                'username' => $username,
-                'nama_lengkap' => $namaLengkap,
-                'nip_nidn' => !empty($nipNidn) ? $nipNidn : $user->nip_nidn,
-                'no_hp' => !empty($noHp) && $noHp !== '-' ? $noHp : $user->no_hp,
-                'email' => !empty($email) && $email !== '-' ? $email : $user->email,
+            $updatePayload = [
+                'nama_lengkap' => !empty($namaLengkap) ? $namaLengkap : $user->nama_lengkap,
+                'nip_nidn' => (!empty($nipNidn) && $nipNidn !== '-') ? $nipNidn : $user->nip_nidn,
+                'no_hp' => (!empty($noHp) && $noHp !== '-') ? $noHp : $user->no_hp,
+                'email' => (!empty($email) && $email !== '-') ? $email : $user->email,
                 'is_active' => $isActive,
-            ]);
+            ];
+
+            // Hanya update username jika username di Excel diisi DAN username tersebut tidak dipakai oleh user lain di DB
+            if (!empty($username) && $username !== $user->username) {
+                $isUsernameTaken = User::where('username', $username)->where('id', '!=', $user->id)->exists();
+                if (!$isUsernameTaken) {
+                    $updatePayload['username'] = $username;
+                }
+            }
+
+            $user->update($updatePayload);
 
             return $user;
+        }
+
+        // 3. Jika user DPL belum ada, siapkan pembuatan user baru
+        if (empty($username)) {
+            if (!empty($nipNidn) && $nipNidn !== '-') {
+                $username = 'dpl_' . preg_replace('/[^a-zA-Z0-9]/', '', $nipNidn);
+            } else {
+                $username = 'dpl_' . Str::slug($namaLengkap, '_');
+            }
+        }
+
+        if (empty($namaLengkap)) {
+            $namaLengkap = 'DPL ' . strtoupper($username);
+        }
+
+        // Pastikan username unik untuk user baru agar tidak terjadi SQL duplicate entry
+        $originalUsername = $username;
+        $counter = 1;
+        while (User::where('username', $username)->exists()) {
+            $username = $originalUsername . '_' . $counter;
+            $counter++;
         }
 
         return User::create([
@@ -75,7 +94,7 @@ class DplImport implements ToModel, WithHeadingRow
             'password' => Hash::make($passwordInput),
             'role' => 'dpl',
             'nama_lengkap' => $namaLengkap,
-            'nip_nidn' => $nipNidn ?: null,
+            'nip_nidn' => ($nipNidn && $nipNidn !== '-') ? $nipNidn : null,
             'no_hp' => ($noHp && $noHp !== '-') ? $noHp : null,
             'email' => ($email && $email !== '-') ? $email : null,
             'must_change_password' => true,
