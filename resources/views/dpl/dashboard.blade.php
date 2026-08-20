@@ -18,8 +18,8 @@
         </div>
         <div class="col-12 col-lg-4 text-lg-end">
             <span class="text-white-50 fs-8 d-block mb-1">Beban Bimbingan Mahasiswa:</span>
-            <span class="badge {{ $totalMahasiswa > 10 ? 'bg-danger text-white' : 'bg-success text-white' }} fs-6 px-3 py-2 shadow-sm">
-                👥 {{ $totalMahasiswa }} / Maks 10 Mahasiswa
+            <span class="badge {{ $totalMahasiswa > 20 ? 'bg-danger text-white' : ($totalMahasiswa > 10 ? 'bg-warning text-dark' : 'bg-success text-white') }} fs-6 px-3 py-2 shadow-sm">
+                👥 {{ $totalMahasiswa }} / Maks 30 Mahasiswa
             </span>
         </div>
     </div>
@@ -75,7 +75,7 @@
                 <span class="text-muted fs-8 text-uppercase fw-bold">Total Mahasiswa</span>
                 <span class="badge bg-info bg-opacity-10 text-info p-2 rounded-circle">👨‍🎓</span>
             </div>
-            <h3 class="fw-bold mb-1 text-info">{{ $totalMahasiswa }} <span class="fs-7 text-muted fw-normal">/ 10</span></h3>
+            <h3 class="fw-bold mb-1 text-info">{{ $totalMahasiswa }} <span class="fs-7 text-muted fw-normal">/ 30</span></h3>
             <span class="fs-8 text-muted">Mahasiswa bimbingan DPL</span>
         </div>
     </div>

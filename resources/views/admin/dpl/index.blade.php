@@ -130,11 +130,13 @@
                             <div class="text-muted fs-8">{{ $dpl->email ?? '-' }}</div>
                         </td>
                         <td>
-                            @if($dpl->total_bimbingan_mhs > 10)
-                                <span class="badge bg-danger px-3 py-1">⚠️ {{ $dpl->total_bimbingan_mhs }} / 10 Mahasiswa</span>
+                            @if($dpl->total_bimbingan_mhs > 20)
+                                <span class="badge bg-danger px-3 py-1">🔥 {{ $dpl->total_bimbingan_mhs }} / 30 Mahasiswa</span>
+                            @elseif($dpl->total_bimbingan_mhs > 10)
+                                <span class="badge bg-warning text-dark px-3 py-1">⚠️ {{ $dpl->total_bimbingan_mhs }} / 30 Mahasiswa</span>
                             @elseif($dpl->total_bimbingan_mhs > 0)
-                                <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-20 px-3 py-1">
-                                    👨‍🎓 {{ $dpl->total_bimbingan_mhs }} / 10 Mahasiswa
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1">
+                                    🟢 {{ $dpl->total_bimbingan_mhs }} / 30 Mahasiswa
                                 </span>
                             @else
                                 <span class="badge bg-light text-muted border">Belum Ada Bimbingan</span>

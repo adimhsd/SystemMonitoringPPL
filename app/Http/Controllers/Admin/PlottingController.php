@@ -112,7 +112,7 @@ class PlottingController extends Controller
             'mahasiswa_ids.max' => 'Satu kelompok maksimal terdiri dari 10 mahasiswa.',
         ]);
 
-        // Validation for DPL maximum load (10 students max)
+        // Validation for DPL maximum load (30 students max)
         $selectedMahasiswaCount = count($request->mahasiswa_ids);
         $currentDplLoad = KelompokPpl::where('dpl_id', $request->dpl_id)
             ->where('status', 'aktif')
@@ -121,9 +121,9 @@ class PlottingController extends Controller
             ->get()
             ->sum('anggota_count');
 
-        if (($currentDplLoad + $selectedMahasiswaCount) > 10) {
+        if (($currentDplLoad + $selectedMahasiswaCount) > 30) {
             return back()->withInput()->withErrors([
-                'dpl_id' => "DPL ini sudah membimbing {$currentDplLoad} mahasiswa. Penambahan {$selectedMahasiswaCount} mahasiswa melebihi batas maksimal 10 mahasiswa.",
+                'dpl_id' => "DPL ini sudah membimbing {$currentDplLoad} mahasiswa. Penambahan {$selectedMahasiswaCount} mahasiswa melebihi batas maksimal 30 mahasiswa per DPL.",
             ]);
         }
 

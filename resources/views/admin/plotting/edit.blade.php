@@ -36,16 +36,24 @@
                 <!-- 2. DPL Pembimbing -->
                 <div class="mb-4 p-3 bg-light rounded-3 border">
                     <label for="dpl_id" class="form-label fw-bold text-dark fs-6 mb-1">2. Pilih Dosen Pembimbing Lapangan (DPL) <span class="text-danger">*</span></label>
-                    <p class="text-muted fs-8 mb-2">Beban bimbingan DPL dibatasi maksimal <strong>10 mahasiswa</strong>.</p>
+                    <p class="text-muted fs-8 mb-2">Beban bimbingan DPL dibatasi maksimal <strong>30 mahasiswa</strong>.</p>
                     <select class="form-select @error('dpl_id') is-invalid @enderror" id="dpl_id" name="dpl_id" required>
                         <option value="">-- Pilih Dosen Pembimbing --</option>
                         @foreach($dplList as $d)
                             @php
-                                $isCurrentDpl = ($kelompok->dpl_id == $d->id);
-                                $statusBadge = $d->total_bimbingan_mhs >= 10 ? '🔴 (Penuh)' : '🟢 (' . $d->total_bimbingan_mhs . '/10 Mhs)';
+                                $load = $d->total_bimbingan_mhs ?? 0;
+                                if ($load >= 30) {
+                                    $statusBadge = '🔴 (' . $load . '/30 Mhs - Penuh)';
+                                } elseif ($load > 20) {
+                                    $statusBadge = '🔥 (' . $load . '/30 Mhs - Beban Tinggi)';
+                                } elseif ($load > 10) {
+                                    $statusBadge = '⚠️ (' . $load . '/30 Mhs - Beban >10)';
+                                } else {
+                                    $statusBadge = '🟢 (' . $load . '/30 Mhs)';
+                                }
                             @endphp
                             <option value="{{ $d->id }}" {{ old('dpl_id', $kelompok->dpl_id) == $d->id ? 'selected' : '' }}>
-                                👨‍🏫 {{ $d->nama_lengkap }} — Beban: {{ $d->total_bimbingan_mhs }}/10 Mahasiswa {{ $statusBadge }}
+                                👨‍🏫 {{ $d->nama_lengkap }} — Beban: {{ $load }}/30 Mahasiswa {{ $statusBadge }}
                             </option>
                         @endforeach
                     </select>
