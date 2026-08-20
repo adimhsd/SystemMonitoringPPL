@@ -41,8 +41,19 @@ class MahasiswaImport implements ToModel, WithHeadingRow
 
         // Normalisasi konsentrasi, no_hp, alamat
         $konsentrasi = isset($row['konsentrasi']) ? trim((string) $row['konsentrasi']) : (isset($row['kelas']) ? trim((string) $row['kelas']) : null);
+        if ($konsentrasi === '-') {
+            $konsentrasi = null;
+        }
+
         $noHp = isset($row['no_hp_whatsapp']) ? trim((string) $row['no_hp_whatsapp']) : (isset($row['no_hp']) ? trim((string) $row['no_hp']) : null);
+        if ($noHp === '-') {
+            $noHp = null;
+        }
+
         $alamat = isset($row['alamat']) ? trim((string) $row['alamat']) : null;
+        if ($alamat === '-') {
+            $alamat = null;
+        }
 
         // Normalisasi Kelompok PPL
         $kelompokId = null;
