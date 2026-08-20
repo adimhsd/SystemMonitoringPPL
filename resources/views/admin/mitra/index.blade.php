@@ -122,8 +122,13 @@
     @endforelse
 </div>
 
-<div class="mt-3">
-    {{ $mitraList->links() }}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mt-3 px-1">
+    <div class="text-muted fs-7">
+        Menampilkan <strong>{{ $mitraList->firstItem() ?? 0 }}</strong> – <strong>{{ $mitraList->lastItem() ?? 0 }}</strong> dari <strong>{{ $mitraList->total() }}</strong> Mitra Instansi
+    </div>
+    <div>
+        {{ $mitraList->links() }}
+    </div>
 </div>
 
 <!-- Modal Impor Excel Mitra -->

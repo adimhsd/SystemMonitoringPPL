@@ -38,7 +38,7 @@ class KelompokController extends Controller
             });
         }
 
-        $kelompokList = $query->latest()->paginate(10)->withQueryString();
+        $kelompokList = $query->latest()->paginate(20)->withQueryString();
 
         return view('admin.kelompok.index', compact('kelompokList'));
     }

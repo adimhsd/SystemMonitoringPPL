@@ -110,7 +110,12 @@
     @endforelse
 </div>
 
-<div class="mt-3">
-    {{ $users->links() }}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mt-3 px-1">
+    <div class="text-muted fs-7">
+        Menampilkan <strong>{{ $users->firstItem() ?? 0 }}</strong> – <strong>{{ $users->lastItem() ?? 0 }}</strong> dari <strong>{{ $users->total() }}</strong> Akun DPL
+    </div>
+    <div>
+        {{ $users->links() }}
+    </div>
 </div>
 @endsection

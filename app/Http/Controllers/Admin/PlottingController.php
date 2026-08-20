@@ -36,7 +36,7 @@ class PlottingController extends Controller
             });
         }
 
-        $plottingList = $query->latest()->paginate(10)->withQueryString();
+        $plottingList = $query->latest()->paginate(20)->withQueryString();
 
         return view('admin.plotting.index', compact('plottingList'));
     }

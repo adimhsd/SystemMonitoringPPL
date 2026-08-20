@@ -160,7 +160,12 @@
     </div>
 </div>
 
-<div class="mt-3">
-    {{ $kelompokList->links() }}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mt-3 px-1">
+    <div class="text-muted fs-7">
+        Menampilkan <strong>{{ $kelompokList->firstItem() ?? 0 }}</strong> – <strong>{{ $kelompokList->lastItem() ?? 0 }}</strong> dari <strong>{{ $kelompokList->total() }}</strong> Kelompok PPL
+    </div>
+    <div>
+        {{ $kelompokList->links() }}
+    </div>
 </div>
 @endsection

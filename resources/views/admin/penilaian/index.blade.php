@@ -210,8 +210,13 @@
     </div>
 </div>
 
-<div class="mt-3">
-    {{ $mahasiswaList->links() }}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mt-3 px-1">
+    <div class="text-muted fs-7">
+        Menampilkan <strong>{{ $mahasiswaList->firstItem() ?? 0 }}</strong> – <strong>{{ $mahasiswaList->lastItem() ?? 0 }}</strong> dari <strong>{{ $mahasiswaList->total() }}</strong> Mahasiswa
+    </div>
+    <div>
+        {{ $mahasiswaList->links() }}
+    </div>
 </div>
 
 <!-- Modal Konfigurasi Skala Nilai Huruf -->

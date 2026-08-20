@@ -36,7 +36,7 @@ class PenilaianController extends Controller
             });
         }
 
-        $mahasiswaList = $query->latest()->paginate(15)->withQueryString();
+        $mahasiswaList = $query->latest()->paginate(20)->withQueryString();
         $kelompokList = KelompokPpl::all();
 
         // 1. Ringkasan Statistik Mahasiswa Dinilai

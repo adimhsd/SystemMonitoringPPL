@@ -32,7 +32,7 @@ class DplController extends Controller
             });
         }
 
-        $dplList = $query->latest()->paginate(10)->withQueryString();
+        $dplList = $query->latest()->paginate(20)->withQueryString();
 
         // Calculate total bimbingan mahasiswa per DPL
         foreach ($dplList as $dpl) {

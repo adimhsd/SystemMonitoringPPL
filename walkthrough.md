@@ -1,24 +1,25 @@
-# Walkthrough Implementation — Penataan Layout Tombol & Kartu Ringkasan Data DPL
+# Walkthrough Implementation — Migrasi Kolom Email pada Tabel Users
 
-Penataan ulang tata letak tombol aksi serta penambahan **4 Kartu Ringkasan Statistik Data DPL (Executive Metric Cards)** pada halaman [Master Data DPL](http://127.0.0.1:8000/admin/dpl) telah **SELESAI DITERAPKAN, DITERUJI, DAN DIPUSH KE GITHUB 100%**.
+Perbaikan error `SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email'` melalui **penambahan migrasi kolom `email` pada tabel `users`** telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🛠️ Perubahan & Penyempurnaan Tampilan
+## 🔍 Penyebab Error & Solusi
 
-1. **Penataan Layout Tombol Aksi (Responsive Header)**:
-   - Judul dan subjudul halaman DPL diletakkan dalam blok khusus (`mb-3`).
-   - Seluruh 4 tombol aksi (`+ Tambah DPL Baru`, `📄 Download Template Excel`, `📥 Impor Excel`, `📊 Export Excel`) disusun rapi dalam kontainer `d-flex flex-wrap gap-2` pada baris tersendiri di bawah judul, sesuai standar halaman Data Mahasiswa.
+1. **Root Cause**:
+   Pada struktur awal migrasi tabel `users`, kolom `email` belum terdaftar secara fisik di tabel MySQL, meskipun controller dan model sudah menyiapkan atribut `email`. Akibatnya, saat query ringkasan data DPL menghitung DPL yang memiliki email (`whereNotNull('email')`), MySQL memberikan penolakan error 1054.
 
-2. **4 Kartu Ringkasan Statistik Data DPL (Header Cards)**:
-   - **Card 1 (Total DPL & Status)**: Menampilkan Total DPL Fakultas, jumlah DPL Aktif (✅), dan DPL Non-Aktif (⚠️).
-   - **Card 2 (Penugasan Kelompok)**: Menampilkan jumlah DPL yang sudah membimbing kelompok PPL (👥) vs DPL Standby (⏳).
-   - **Card 3 (Beban Bimbingan Mahasiswa)**: Menampilkan Total Mahasiswa yang dibimbing oleh DPL serta Rata-rata Bimbingan per DPL (🎓).
-   - **Card 4 (Kelengkapan Identitas & Kontak)**: Menampilkan DPL dengan NIP/NIDN terisi (📇), ketersediaan kontak WhatsApp (📱), dan Email (📧).
+2. **Perbaikan**:
+   - Dibuat migrasi baru [`2026_01_01_000014_add_email_to_users_table.php`](file:///c:/SystemMonitoringPPL/database/migrations/2026_01_01_000014_add_email_to_users_table.php):
+     ```php
+     $table->string('email', 100)->nullable()->after('no_hp');
+     ```
+   - Menambahkan `'email'` ke dalam `$fillable` array pada model [`App\Models\User.php`](file:///c:/SystemMonitoringPPL/app/Models/User.php).
+   - Menjalankan `php artisan migrate` sehingga kolom `email` terpasang sempurna di database.
 
 ---
 
 ## 🧪 Hasil Automated Unit & Feature Tests
 
 - **Status Pengujian**: `92 tests, 275 assertions` — **PASSED 100%**.
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `a860b2a`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `7408918`).

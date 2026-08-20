@@ -50,7 +50,7 @@ class LuaranController extends Controller
             }
         }
 
-        $kelompokList = $query->latest()->paginate(15)->withQueryString();
+        $kelompokList = $query->latest()->paginate(20)->withQueryString();
 
         // Calculations for Summary Stat Cards
         $totalKelompok = KelompokPpl::count();

@@ -39,7 +39,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10)->withQueryString();
+        $users = $query->latest()->paginate(20)->withQueryString();
 
         return view('admin.users.index', compact('stats', 'users'));
     }
@@ -61,7 +61,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10)->withQueryString();
+        $users = $query->latest()->paginate(20)->withQueryString();
         $totalDpl = User::where('role', 'dpl')->count();
 
         return view('admin.users.dpl', compact('users', 'totalDpl'));
@@ -86,7 +86,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10)->withQueryString();
+        $users = $query->latest()->paginate(20)->withQueryString();
         $totalPic = User::where('role', 'pic_mitra')->count();
 
         return view('admin.users.pic', compact('users', 'totalPic'));
@@ -110,7 +110,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10)->withQueryString();
+        $users = $query->latest()->paginate(20)->withQueryString();
         $totalKelompok = User::where('role', 'ketua_kelompok')->count();
 
         return view('admin.users.kelompok', compact('users', 'totalKelompok'));

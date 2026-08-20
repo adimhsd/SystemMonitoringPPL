@@ -33,7 +33,7 @@ class MitraController extends Controller
             });
         }
 
-        $mitraList = $query->latest()->paginate(10)->withQueryString();
+        $mitraList = $query->latest()->paginate(20)->withQueryString();
 
         return view('admin.mitra.index', compact('mitraList'));
     }
