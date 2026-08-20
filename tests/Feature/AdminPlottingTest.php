@@ -74,4 +74,44 @@ class AdminPlottingTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_plotting_allows_up_to_20_students_per_kelompok_and_rejects_above_20(): void
+    {
+        $dpl = User::create([
+            'username' => 'dpl_kelompok_limit_test',
+            'password' => bcrypt('password'),
+            'role' => 'dpl',
+            'nama_lengkap' => 'DPL Limit Test',
+            'is_active' => true,
+        ]);
+
+        $mhs21 = [];
+        for ($i = 1; $i <= 21; $i++) {
+            $m = \App\Models\Mahasiswa::create([
+                'nim' => "20268880{$i}",
+                'nama' => "Student Limit {$i}",
+                'jenis_kelamin' => 'Laki-laki',
+                'prodi' => 'Manajemen',
+            ]);
+            $mhs21[] = $m->id;
+        }
+
+        // Submitting 21 students (>20) should fail
+        $failResponse = $this->actingAs($this->admin)->put("/admin/plotting/{$this->kelompok->id}", [
+            'mitra_id' => $this->kelompok->mitra_id,
+            'dpl_id' => $dpl->id,
+            'mahasiswa_ids' => $mhs21,
+        ]);
+        $failResponse->assertSessionHasErrors('mahasiswa_ids');
+
+        // Submitting 20 students (<=20) should pass
+        array_pop($mhs21);
+        $passResponse = $this->actingAs($this->admin)->put("/admin/plotting/{$this->kelompok->id}", [
+            'mitra_id' => $this->kelompok->mitra_id,
+            'dpl_id' => $dpl->id,
+            'mahasiswa_ids' => $mhs21,
+        ]);
+        $passResponse->assertSessionHasNoErrors();
+        $passResponse->assertRedirect('/admin/plotting');
+    }
 }

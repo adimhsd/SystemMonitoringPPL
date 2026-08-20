@@ -56,7 +56,17 @@
 </div>
 
 <div class="card card-custom p-4">
-    <h5 class="fw-bold mb-3">Daftar Anggota Kelompok ({{ $kelompok->anggota->count() }} Mahasiswa)</h5>
+    @php $mhsCount = $kelompok->anggota->count(); @endphp
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Daftar Anggota Kelompok</h5>
+        @if($mhsCount > 15)
+            <span class="badge bg-danger px-3 py-1">🔥 {{ $mhsCount }} / 20 Mahasiswa (Kelompok Besar)</span>
+        @elseif($mhsCount > 10)
+            <span class="badge bg-warning text-dark px-3 py-1">⚠️ {{ $mhsCount }} / 20 Mahasiswa (Kelompok Besar >10)</span>
+        @else
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1">🟢 {{ $mhsCount }} / 20 Mahasiswa</span>
+        @endif
+    </div>
 
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0 fs-7">

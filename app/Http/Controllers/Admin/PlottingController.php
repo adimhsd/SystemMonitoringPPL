@@ -103,13 +103,13 @@ class PlottingController extends Controller
         $request->validate([
             'mitra_id' => ['required', 'exists:mitra,id'],
             'dpl_id' => ['required', 'exists:users,id'],
-            'mahasiswa_ids' => ['required', 'array', 'min:1', 'max:10'],
+            'mahasiswa_ids' => ['required', 'array', 'min:1', 'max:20'],
             'mahasiswa_ids.*' => ['exists:anggota_kelompok,id'],
         ], [
             'mitra_id.required' => 'Mitra penempatan wajib dipilih.',
             'dpl_id.required' => 'Dosen Pembimbing (DPL) wajib dipilih.',
             'mahasiswa_ids.required' => 'Pilih minimal 1 mahasiswa anggota kelompok.',
-            'mahasiswa_ids.max' => 'Satu kelompok maksimal terdiri dari 10 mahasiswa.',
+            'mahasiswa_ids.max' => 'Satu kelompok maksimal terdiri dari 20 mahasiswa.',
         ]);
 
         // Validation for DPL maximum load (30 students max)

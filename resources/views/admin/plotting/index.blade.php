@@ -68,8 +68,15 @@
                         </td>
                         <td>
                             @if($k->anggota->count() > 0)
+                                @php $c = $k->anggota->count(); @endphp
                                 <div class="fw-semibold text-dark mb-1">
-                                    <span class="badge bg-primary px-2 py-1 me-1">{{ $k->anggota->count() }} Mahasiswa:</span>
+                                    @if($c > 15)
+                                        <span class="badge bg-danger px-2 py-1 me-1">🔥 {{ $c }} Mahasiswa</span>
+                                    @elseif($c > 10)
+                                        <span class="badge bg-warning text-dark px-2 py-1 me-1">⚠️ {{ $c }} Mahasiswa</span>
+                                    @else
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-2 py-1 me-1">🟢 {{ $c }} Mahasiswa</span>
+                                    @endif
                                 </div>
                                 <div class="fs-8 text-secondary">
                                     @foreach($k->anggota->take(3) as $mhs)

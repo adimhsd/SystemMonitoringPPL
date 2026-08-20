@@ -66,7 +66,7 @@
                 <div class="mb-4 p-3 bg-light rounded-3 border" x-data="{ searchMhs: '' }">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label fw-bold text-dark fs-6 mb-0">3. Pilih Mahasiswa Anggota Kelompok <span class="text-danger">*</span></label>
-                        <span class="badge bg-secondary">Minimal 1, Maksimal 10 Mahasiswa</span>
+                        <span class="badge bg-secondary">Minimal 1, Maksimal 20 Mahasiswa</span>
                     </div>
                     <p class="text-muted fs-8 mb-2">Centang mahasiswa yang akan dimasukkan ke dalam {{ $kelompok->nama_kelompok }}:</p>
 

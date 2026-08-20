@@ -161,7 +161,16 @@
                             @endif
                         </td>
                         <td>
-                            <span class="badge bg-secondary px-3 py-1">{{ $k->anggota->count() }} Mahasiswa</span>
+                            @php $count = $k->anggota->count(); @endphp
+                            @if($count > 15)
+                                <span class="badge bg-danger px-3 py-1">🔥 {{ $count }} Mahasiswa</span>
+                            @elseif($count > 10)
+                                <span class="badge bg-warning text-dark px-3 py-1">⚠️ {{ $count }} Mahasiswa</span>
+                            @elseif($count > 0)
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1">🟢 {{ $count }} Mahasiswa</span>
+                            @else
+                                <span class="badge bg-light text-muted border">0 Mahasiswa</span>
+                            @endif
                         </td>
                         <td>
                             @if($k->mitra && $k->dpl && $k->anggota->count() > 0)
