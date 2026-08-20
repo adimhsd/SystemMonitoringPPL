@@ -35,18 +35,22 @@ class DplImport implements ToModel, WithHeadingRow
         $statusInput = strtolower(trim((string) ($row['status_akun'] ?? $row['status'] ?? 'aktif')));
         $isActive = !in_array($statusInput, ['non-aktif', 'nonaktif', '0', 'false', 'disabled', 'inaktif']);
 
-        // 1. Cari user DPL yang sudah ada: prioritaskan NIP/NIDN (identitas akademik unik DPL), kemudian username
+        // 1. Cari user DPL yang sudah ada (termasuk soft-deleted): prioritaskan NIP/NIDN, kemudian username
         $user = null;
         if (!empty($nipNidn) && $nipNidn !== '-') {
-            $user = User::where('role', 'dpl')->where('nip_nidn', $nipNidn)->first();
+            $user = User::withTrashed()->where('role', 'dpl')->where('nip_nidn', $nipNidn)->first();
         }
 
         if (!$user && !empty($username)) {
-            $user = User::where('role', 'dpl')->where('username', $username)->first();
+            $user = User::withTrashed()->where('role', 'dpl')->where('username', $username)->first();
         }
 
-        // 2. Jika user DPL sudah ditemukan, lakukan update secara aman
+        // 2. Jika user DPL sudah ditemukan (aktif/soft-deleted), pulihkan jika perlu dan perbarui data secara aman
         if ($user) {
+            if ($user->trashed()) {
+                $user->restore();
+            }
+
             $updatePayload = [
                 'nama_lengkap' => !empty($namaLengkap) ? $namaLengkap : $user->nama_lengkap,
                 'nip_nidn' => (!empty($nipNidn) && $nipNidn !== '-') ? $nipNidn : $user->nip_nidn,
@@ -55,9 +59,9 @@ class DplImport implements ToModel, WithHeadingRow
                 'is_active' => $isActive,
             ];
 
-            // Hanya update username jika username di Excel diisi DAN username tersebut tidak dipakai oleh user lain di DB
+            // Hanya update username jika username di Excel diisi DAN username tersebut tidak dipakai oleh user lain di DB (termasuk trashed)
             if (!empty($username) && $username !== $user->username) {
-                $isUsernameTaken = User::where('username', $username)->where('id', '!=', $user->id)->exists();
+                $isUsernameTaken = User::withTrashed()->where('username', $username)->where('id', '!=', $user->id)->exists();
                 if (!$isUsernameTaken) {
                     $updatePayload['username'] = $username;
                 }
@@ -81,10 +85,10 @@ class DplImport implements ToModel, WithHeadingRow
             $namaLengkap = 'DPL ' . strtoupper($username);
         }
 
-        // Pastikan username unik untuk user baru agar tidak terjadi SQL duplicate entry
+        // Pastikan username unik di seluruh tabel users (termasuk soft-deleted) agar tidak terjadi SQL duplicate entry
         $originalUsername = $username;
         $counter = 1;
-        while (User::where('username', $username)->exists()) {
+        while (User::withTrashed()->where('username', $username)->exists()) {
             $username = $originalUsername . '_' . $counter;
             $counter++;
         }

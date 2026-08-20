@@ -1,37 +1,38 @@
-# Walkthrough Implementation — Ringkasan Statistik Data Mahasiswa Admin
+# Walkthrough Implementation — Perbaikan Error Duplicate Entry DPL Import
 
-Penambahan Widget **Ringkasan / Report Statistik Data Mahasiswa** pada menu **Master Data Mahasiswa Admin (`/admin/mahasiswa`)** telah **SELESAI DITERAPKAN DAN DIPUSH KE GITHUB 100%**.
+Perbaikan bug **SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry** pada fitur **Impor Excel DPL (`DplImport.php`)** telah **SELESAI DITERAPKAN, DIVERIFIKASI DENGAN AUTOMATED TEST, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
-## 🚀 Perubahan yang Diterapkan
+## 🔍 Penyebab Error & Perbaikan
 
-### 📊 4 Kartu Ringkasan Statistik Eksekutif (Header Cards)
-- **Kartu 1: Total Mahasiswa & Gender**
-  - Menampilkan jumlah total mahasiswa PPL FEB UNIKU beserta rincian jumlah mahasiswa 👨 Laki-laki dan 👩 Perempuan.
-- **Kartu 2: Status Plotting Kelompok**
-  - Menampilkan rasio mahasiswa yang sudah ter-plotkan ke dalam kelompok magang PPL vs mahasiswa yang ⏳ belum diplotkan.
-- **Kartu 3: Sebaran Program Studi (Prodi)**
-  - Menampilkan sebaran data mahasiswa peserta PPL per prodi: *Manajemen*, *Akuntansi*, dan *Bisnis Digital*.
-- **Kartu 4: Kelengkapan Kontak WhatsApp**
-  - Menampilkan rasio mahasiswa yang memiliki nomor HP/WhatsApp aktif vs mahasiswa yang belum mengisi kontak.
+### 1. Root Cause (Penyebab Masalah)
+- Saat mengimpor Excel DPL, sistem menemukan baris DPL yang memiliki NIP/NIDN sama dengan data di database (misalnya DPL A), namun baris Excel tersebut mencantumkan username (misalnya `DPL_PPL41`) yang sudah dimiliki oleh user lain (misalnya DPL B).
+- Sebelumnya, `DplImport` langsung melakukan `update(['username' => 'DPL_PPL41'])` tanpa memeriksa apakah username `DPL_PPL41` sudah dipakai oleh user lain di tabel `users`.
+- Akibatnya, MySQL menolak update tersebut dan melontarkan error:
+  `SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'DPL_PPL41' for key 'users.users_username_unique'`.
+
+---
+
+### 2. Solusi & Perbaikan (`app/Imports/DplImport.php`)
+- **Pencarian Berdasarkan NIP/NIDN (Prioritas Utama)**:
+  Sistem kini memprioritaskan pencarian data DPL berdasarkan `nip_nidn` (nomor identitas unik dosen) kemudian `username`.
+- **Perhitungan Aman Pembaruan Username**:
+  Saat memperbarui DPL yang sudah ada, `DplImport` kini memeriksa `isUsernameTaken`:
+  ```php
+  $isUsernameTaken = User::where('username', $username)->where('id', '!=', $user->id)->exists();
+  if (!$isUsernameTaken) {
+      $updatePayload['username'] = $username;
+  }
+  ```
+  Jika username tersebut sudah dipakai oleh akun user lain, sistem **tidak akan memaksakan pembaruan username** (tetap menggunakan username lama yang valid), sehingga proses impor berjalan lancar 100% tanpa error constraint.
+- **Auto-Suffix untuk Akun DPL Baru**:
+  Jika dibuat DPL baru dan username yang dimasukkan di Excel ternyata sudah terpakai, sistem otomatis menambahkan akhiran unik (`DPL_PPL41_1`, `DPL_PPL41_2`, dst).
 
 ---
 
 ## 🧪 Hasil Automated Unit & Feature Tests
 
-```bash
-vendor/bin/phpunit
-```
-
-```
-PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
-
-..................................................................... 85 / 85 (100%)
-
-Time: 00:09.893, Memory: 38.50 MB
-
-OK (85 tests, 253 assertions)
-```
-
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `aa1678d`).
+- **Test Suite Khusus**: [`tests/Feature/AdminDplImportDuplicateTest.php`](file:///c:/SystemMonitoringPPL/tests/Feature/AdminDplImportDuplicateTest.php)
+- **Status Pengujian**: `2 tests, 5 assertions` — **PASSED 100%**.
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `820d770`).
