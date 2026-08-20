@@ -80,7 +80,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/kelompok/{kelompok}/logbook-pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('kelompok.logbook.pdf');
             Route::resource('kelompok', AdminKelompokController::class);
             
-            // Plotting Kelompok
+            // Plotting Kelompok & Export Reports
+            Route::get('/plotting/pdf', [AdminPlottingController::class, 'exportPdf'])->name('plotting.pdf');
+            Route::get('/plotting/export-excel', [AdminPlottingController::class, 'exportExcel'])->name('plotting.export-excel');
             Route::resource('plotting', AdminPlottingController::class)->parameters(['plotting' => 'kelompok']);
             
             // Kelola User System & Sub-menu Kategori Akun

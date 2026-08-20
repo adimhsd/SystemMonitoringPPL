@@ -8,6 +8,14 @@
         <h4 class="fw-bold mb-1">Plotting & Pemetaan Kelompok PPL</h4>
         <p class="text-muted mb-0 fs-7">Pemetaan penempatan antara <strong>Kelompok PPL</strong>, <strong>Mitra Instansi</strong>, <strong>Dosen Pembimbing (DPL)</strong>, dan <strong>Mahasiswa Anggota</strong> (1–10 mahasiswa per kelompok).</p>
     </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ route('admin.plotting.pdf', request()->query()) }}" target="_blank" class="btn btn-outline-danger btn-touch rounded-3 fw-semibold">
+            📄 Cetak PDF Report
+        </a>
+        <a href="{{ route('admin.plotting.export-excel', request()->query()) }}" class="btn btn-outline-success btn-touch rounded-3 fw-semibold">
+            📊 Export Excel
+        </a>
+    </div>
 </div>
 
 <!-- Search Card -->
