@@ -18,6 +18,7 @@ class User extends Authenticatable
         'nama_lengkap',
         'no_hp',
         'nip_nidn',
+        'email',
         'must_change_password',
         'is_active',
     ];
