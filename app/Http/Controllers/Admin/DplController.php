@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\DplExport;
+use App\Exports\DplTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Imports\DplImport;
 use App\Models\KelompokPpl;
@@ -156,6 +157,14 @@ class DplController extends Controller
     public function exportExcel()
     {
         return Excel::download(new DplExport, 'Master_Data_DPL_PPL.xlsx');
+    }
+
+    /**
+     * Download Template Excel Import DPL.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new DplTemplateExport, 'Template_Import_DPL_PPL.xlsx');
     }
 
     /**

@@ -12,6 +12,9 @@
         <a href="{{ route('admin.dpl.create') }}" class="btn btn-primary btn-touch rounded-3 fw-semibold">
             + Tambah DPL Baru
         </a>
+        <a href="{{ route('admin.dpl.template') }}" class="btn btn-outline-info btn-touch rounded-3 fw-semibold">
+            📄 Download Template Excel
+        </a>
         <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcelDpl">
             📥 Impor Excel
         </button>
@@ -120,18 +123,26 @@
             <form action="{{ route('admin.dpl.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body fs-7">
-                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) yang berisi data Dosen Pembimbing Lapangan (DPL).</p>
+                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) sesuai dengan format template resmi DPL.</p>
+
+                    <div class="mb-3">
+                        <a href="{{ route('admin.dpl.template') }}" class="btn btn-sm btn-light border text-primary fw-semibold w-100 py-2">
+                            📥 Download Template Resmi Impor DPL (.xlsx)
+                        </a>
+                    </div>
 
                     <div class="p-3 bg-light rounded-3 mb-3 border fs-8">
-                        <strong class="d-block mb-1 text-dark">📋 Petunjuk Baris Header Kolom Excel:</strong>
-                        <ul class="mb-0 ps-3 text-secondary">
-                            <li><code>username</code> : Username Login (Otomatis dibuat dari nama/NIP jika kosong)</li>
-                            <li><code>nip_nidn</code> / <code>nip</code> : NIP / NIDN Dosen (opsional)</li>
-                            <li><code>nama_lengkap_dpl</code> / <code>nama_lengkap</code> : Nama Lengkap & Gelar DPL (Wajib)</li>
-                            <li><code>no_hp_whatsapp</code> / <code>no_hp</code> : Nomor Telepon/WA (opsional)</li>
-                            <li><code>email</code> : Alamat Email Dosen (opsional)</li>
-                            <li><code>password</code> : Password Akun (Default: <code>password123</code>)</li>
-                        </ul>
+                        <strong class="d-block mb-1 text-dark">📋 Urutan Kolom Template Impor DPL:</strong>
+                        <ol class="mb-0 ps-3 text-secondary">
+                            <li><code>ID DPL</code> (Dikosongkan saat tambah data baru)</li>
+                            <li><code>Username</code> (Opsional, dibuat otomatis jika kosong)</li>
+                            <li><code>Password</code> (Default: <code>password123</code> jika dikosongkan)</li>
+                            <li><code>NIP / NIDN</code> (Opsional)</li>
+                            <li><code>Nama Lengkap DPL</code> (Wajib)</li>
+                            <li><code>No HP / Whatsapp</code> (Opsional)</li>
+                            <li><code>Email</code> (Opsional)</li>
+                            <li><code>Status Akun</code> (Default: <code>Aktif</code>)</li>
+                        </ol>
                     </div>
 
                     <div class="mb-3">

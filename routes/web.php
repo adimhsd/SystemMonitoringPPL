@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
             
             // Master Data DPL
             Route::get('/dpl/export', [AdminDplController::class, 'exportExcel'])->name('dpl.export');
+            Route::get('/dpl/template', [AdminDplController::class, 'downloadTemplate'])->name('dpl.template');
             Route::post('/dpl/import', [AdminDplController::class, 'importExcel'])->name('dpl.import');
             Route::resource('dpl', AdminDplController::class);
             
