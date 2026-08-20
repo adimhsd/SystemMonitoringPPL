@@ -55,20 +55,33 @@
                 </div>
 
                 <!-- 3. Anggota Mahasiswa -->
-                <div class="mb-4 p-3 bg-light rounded-3 border">
+                <div class="mb-4 p-3 bg-light rounded-3 border" x-data="{ searchMhs: '' }">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label fw-bold text-dark fs-6 mb-0">3. Pilih Mahasiswa Anggota Kelompok <span class="text-danger">*</span></label>
                         <span class="badge bg-secondary">Minimal 1, Maksimal 10 Mahasiswa</span>
                     </div>
-                    <p class="text-muted fs-8 mb-3">Centang mahasiswa yang akan dimasukkan ke dalam {{ $kelompok->nama_kelompok }}:</p>
+                    <p class="text-muted fs-8 mb-2">Centang mahasiswa yang akan dimasukkan ke dalam {{ $kelompok->nama_kelompok }}:</p>
+
+                    <!-- Input Live Search Filter Mahasiswa -->
+                    <div class="mb-3">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white text-muted">🔍</span>
+                            <input type="text" 
+                                   x-model="searchMhs" 
+                                   class="form-control form-control-sm bg-white" 
+                                   placeholder="Cari berdasarkan Nama Mahasiswa, NIM, Prodi, atau Konsentrasi..." 
+                                   id="searchStudentInput">
+                            <button type="button" class="btn btn-outline-secondary" x-show="searchMhs" @click="searchMhs = ''">&times; Reset</button>
+                        </div>
+                    </div>
 
                     @error('mahasiswa_ids')
                         <div class="alert alert-danger fs-7 py-2 mb-3">{{ $message }}</div>
                     @enderror
 
-                    <div class="table-responsive border rounded-3 bg-white" style="max-height: 300px; overflow-y: auto;">
+                    <div class="table-responsive border rounded-3 bg-white" style="max-height: 480px; overflow-y: auto;">
                         <table class="table table-hover table-sm align-middle mb-0 fs-7">
-                            <thead class="bg-light sticky-top">
+                            <thead class="bg-light sticky-top" style="z-index: 5;">
                                 <tr>
                                     <th style="width: 40px;" class="text-center">#</th>
                                     <th>NIM</th>
@@ -83,7 +96,7 @@
                                     $selectedIds = old('mahasiswa_ids', $kelompok->anggota->pluck('id')->toArray());
                                 @endphp
                                 @forelse($availableMahasiswa as $mhs)
-                                    <tr>
+                                    <tr x-show="!searchMhs || '{{ strtolower($mhs->nama . ' ' . $mhs->nim . ' ' . $mhs->prodi . ' ' . ($mhs->konsentrasi ?? '')) }}'.includes(searchMhs.toLowerCase())">
                                         <td class="text-center">
                                             <input type="checkbox" name="mahasiswa_ids[]" value="{{ $mhs->id }}" class="form-check-input" {{ in_array($mhs->id, $selectedIds) ? 'checked' : '' }}>
                                         </td>
