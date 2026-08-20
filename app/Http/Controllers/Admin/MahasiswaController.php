@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\MahasiswaExport;
+use App\Exports\MahasiswaTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Imports\MahasiswaImport;
 use App\Models\KelompokPpl;
@@ -90,7 +91,7 @@ class MahasiswaController extends Controller
             'nama' => ['required', 'string', 'max:100'],
             'jenis_kelamin' => ['required', Rule::in(['Laki-laki', 'Perempuan'])],
             'prodi' => ['required', Rule::in(['Manajemen', 'Akuntansi', 'Bisnis Digital'])],
-            'konsentrasi' => ['nullable', 'string', 'max:50'],
+            'konsentrasi' => ['nullable', Rule::in(['Pemasaran', 'Operasional', 'Keuangan', 'SDM', 'Akuntansi', 'Bisnis Digital'])],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
             'kelompok_id' => ['nullable', 'exists:kelompok_ppl,id'],
@@ -137,7 +138,7 @@ class MahasiswaController extends Controller
             'nama' => ['required', 'string', 'max:100'],
             'jenis_kelamin' => ['required', Rule::in(['Laki-laki', 'Perempuan'])],
             'prodi' => ['required', Rule::in(['Manajemen', 'Akuntansi', 'Bisnis Digital'])],
-            'konsentrasi' => ['nullable', 'string', 'max:50'],
+            'konsentrasi' => ['nullable', Rule::in(['Pemasaran', 'Operasional', 'Keuangan', 'SDM', 'Akuntansi', 'Bisnis Digital'])],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
             'kelompok_id' => ['nullable', 'exists:kelompok_ppl,id'],
@@ -175,6 +176,14 @@ class MahasiswaController extends Controller
     public function exportExcel()
     {
         return Excel::download(new MahasiswaExport, 'Master_Data_Mahasiswa_PPL.xlsx');
+    }
+
+    /**
+     * Download Template Excel Import Mahasiswa.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new MahasiswaTemplateExport, 'Template_Import_Mahasiswa_PPL.xlsx');
     }
 
     /**

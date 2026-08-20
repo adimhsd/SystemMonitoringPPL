@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
             // Master Data Mahasiswa Routes
             Route::get('/mahasiswa/pdf', [AdminMahasiswaController::class, 'exportPdf'])->name('mahasiswa.pdf');
             Route::get('/mahasiswa/export', [AdminMahasiswaController::class, 'exportExcel'])->name('mahasiswa.export');
+            Route::get('/mahasiswa/template', [AdminMahasiswaController::class, 'downloadTemplate'])->name('mahasiswa.template');
             Route::post('/mahasiswa/import', [AdminMahasiswaController::class, 'importExcel'])->name('mahasiswa.import');
             Route::resource('mahasiswa', AdminMahasiswaController::class);
 

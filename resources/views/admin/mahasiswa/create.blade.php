@@ -62,7 +62,15 @@
                 <div class="row g-3 mb-3">
                     <div class="col-12 col-sm-6">
                         <label for="konsentrasi" class="form-label fw-semibold text-secondary fs-7">Konsentrasi / Peminatan</label>
-                        <input type="text" class="form-control @error('konsentrasi') is-invalid @enderror" id="konsentrasi" name="konsentrasi" value="{{ old('konsentrasi') }}" placeholder="Contoh: Manajemen Pemasaran / Keuangan">
+                        <select class="form-select @error('konsentrasi') is-invalid @enderror" id="konsentrasi" name="konsentrasi">
+                            <option value="">-- Pilih Konsentrasi --</option>
+                            <option value="Pemasaran" {{ old('konsentrasi') == 'Pemasaran' ? 'selected' : '' }}>Pemasaran</option>
+                            <option value="Operasional" {{ old('konsentrasi') == 'Operasional' ? 'selected' : '' }}>Operasional</option>
+                            <option value="Keuangan" {{ old('konsentrasi') == 'Keuangan' ? 'selected' : '' }}>Keuangan</option>
+                            <option value="SDM" {{ old('konsentrasi') == 'SDM' ? 'selected' : '' }}>SDM</option>
+                            <option value="Akuntansi" {{ old('konsentrasi') == 'Akuntansi' ? 'selected' : '' }}>Akuntansi</option>
+                            <option value="Bisnis Digital" {{ old('konsentrasi') == 'Bisnis Digital' ? 'selected' : '' }}>Bisnis Digital</option>
+                        </select>
                         @error('konsentrasi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

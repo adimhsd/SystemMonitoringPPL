@@ -40,7 +40,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Budi Santoso',
             'jenis_kelamin' => 'Laki-laki',
             'prodi' => 'Bisnis Digital',
-            'konsentrasi' => 'Manajemen Keuangan',
+            'konsentrasi' => 'Keuangan',
             'no_hp' => '081299998888',
             'alamat' => 'Jl. Siliwangi No. 10 Kuningan',
             'kelompok_id' => $this->kelompok->id,
@@ -52,7 +52,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Budi Santoso',
             'jenis_kelamin' => 'Laki-laki',
             'prodi' => 'Bisnis Digital',
-            'konsentrasi' => 'Manajemen Keuangan',
+            'konsentrasi' => 'Keuangan',
             'no_hp' => '081299998888',
             'kelompok_id' => $this->kelompok->id,
         ]);
@@ -67,7 +67,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Siti Nurhaliza',
             'jenis_kelamin' => 'Perempuan',
             'prodi' => 'Akuntansi',
-            'konsentrasi' => 'Pemasaran Digital',
+            'konsentrasi' => 'Pemasaran',
             'no_hp' => '089911112222',
             'alamat' => 'Alamat baru',
             'kelompok_id' => null,
@@ -79,7 +79,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Siti Nurhaliza',
             'jenis_kelamin' => 'Perempuan',
             'prodi' => 'Akuntansi',
-            'konsentrasi' => 'Pemasaran Digital',
+            'konsentrasi' => 'Pemasaran',
         ]);
     }
 

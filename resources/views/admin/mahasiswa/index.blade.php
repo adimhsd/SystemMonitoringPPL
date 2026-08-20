@@ -235,19 +235,26 @@
             <form action="{{ route('admin.mahasiswa.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body fs-7">
-                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) yang berisi data mahasiswa.</p>
+                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) sesuai dengan format template resmi Mahasiswa.</p>
+
+                    <div class="mb-3">
+                        <a href="{{ route('admin.mahasiswa.template') }}" class="btn btn-sm btn-light border text-primary fw-semibold w-100 py-2">
+                            📥 Download Template Resmi Impor Mahasiswa (.xlsx)
+                        </a>
+                    </div>
 
                     <div class="p-3 bg-light rounded-3 mb-3 border fs-8">
-                        <strong class="d-block mb-1 text-dark">📋 Petunjuk Baris Header Kolom Excel:</strong>
-                        <ul class="mb-0 ps-3 text-secondary">
-                            <li><code>nim</code> : Nomor Induk Mahasiswa (Wajib, Unik)</li>
-                            <li><code>nama_mahasiswa</code> / <code>nama</code> : Nama Lengkap Mahasiswa</li>
-                            <li><code>jenis_kelamin</code> / <code>jk</code> : Laki-laki / Perempuan (L / P)</li>
-                            <li><code>program_studi</code> / <code>prodi</code> : Manajemen / Akuntansi / Bisnis Digital</li>
-                            <li><code>konsentrasi</code> / <code>kelas</code> : Konsentrasi / Peminatan (opsional)</li>
-                            <li><code>no_hp_whatsapp</code> / <code>no_hp</code> : Nomor Telepon/WA (opsional)</li>
-                            <li><code>alamat</code> : Alamat Rumah (opsional)</li>
-                        </ul>
+                        <strong class="d-block mb-1 text-dark">📋 Urutan Kolom Template Impor Mahasiswa:</strong>
+                        <ol class="mb-0 ps-3 text-secondary">
+                            <li><code>ID Mahasiswa</code> (Dikosongkan saat tambah data baru)</li>
+                            <li><code>NIM</code> (Wajib, Unik)</li>
+                            <li><code>Nama Mahasiswa</code> (Wajib)</li>
+                            <li><code>Jenis Kelamin</code> (Laki-laki / Perempuan)</li>
+                            <li><code>Program Studi</code> (Manajemen / Akuntansi / Bisnis Digital)</li>
+                            <li><code>Konsentrasi</code> (Pemasaran / Operasional / Keuangan / SDM / Akuntansi / Bisnis Digital)</li>
+                            <li><code>No HP / Whatsapp</code> (Opsional)</li>
+                            <li><code>Alamat</code> (Opsional)</li>
+                        </ol>
                     </div>
 
                     <div class="mb-3">
