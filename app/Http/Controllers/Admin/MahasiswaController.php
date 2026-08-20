@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Imports\MahasiswaImport;
 use App\Models\KelompokPpl;
 use App\Models\Mahasiswa;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -181,5 +183,59 @@ class MahasiswaController extends Controller
             return redirect()->route('admin.mahasiswa.index')
                 ->with('error', 'Gagal mengimpor file Excel: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Cetak PDF Laporan Master Data Mahasiswa PPL (Landscape).
+     */
+    public function exportPdf(Request $request)
+    {
+        $query = Mahasiswa::with('kelompok');
+
+        if ($request->filled('prodi')) {
+            $query->where('prodi', $request->prodi);
+        }
+
+        if ($request->filled('jenis_kelamin')) {
+            $query->where('jenis_kelamin', $request->jenis_kelamin);
+        }
+
+        if ($request->filled('kelompok_status')) {
+            if ($request->kelompok_status === 'assigned') {
+                $query->whereNotNull('kelompok_id');
+            } elseif ($request->kelompok_status === 'unassigned') {
+                $query->whereNull('kelompok_id');
+            }
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nim', 'like', "%{$search}%")
+                  ->orWhere('konsentrasi', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%");
+            });
+        }
+
+        $mahasiswaList = $query->latest()->get();
+
+        $totalMahasiswa = $mahasiswaList->count();
+        $totalAssigned = $mahasiswaList->whereNotNull('kelompok_id')->count();
+        $totalUnassigned = $mahasiswaList->whereNull('kelompok_id')->count();
+
+        // Base64 Logo UNIKU
+        $logoUnikuBase64 = null;
+        $logoPath = public_path('images/logo-uniku.png');
+        if (File::exists($logoPath)) {
+            $logoUnikuBase64 = 'data:image/png;base64,' . base64_encode(File::get($logoPath));
+        }
+
+        $pdf = Pdf::loadView('pdf.laporan-mahasiswa', compact('mahasiswaList', 'totalMahasiswa', 'totalAssigned', 'totalUnassigned', 'logoUnikuBase64'))
+            ->setPaper('a4', 'landscape');
+
+        $fileName = 'Laporan_Master_Data_Mahasiswa_PPL_[' . date('d-m-Y') . '].pdf';
+
+        return $pdf->download($fileName);
     }
 }

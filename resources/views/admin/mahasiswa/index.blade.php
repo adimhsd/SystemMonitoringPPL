@@ -12,10 +12,13 @@
         <a href="{{ route('admin.mahasiswa.create') }}" class="btn btn-primary btn-touch rounded-3 fw-semibold">
             + Tambah Mahasiswa
         </a>
+        <a href="{{ route('admin.mahasiswa.pdf', request()->query()) }}" target="_blank" class="btn btn-outline-danger btn-touch rounded-3 fw-semibold">
+            📄 Cetak PDF Report
+        </a>
         <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcel">
             📥 Impor Excel
         </button>
-        <a href="{{ route('admin.mahasiswa.export') }}" class="btn btn-outline-secondary btn-touch rounded-3 fw-semibold">
+        <a href="{{ route('admin.mahasiswa.export', request()->query()) }}" class="btn btn-outline-secondary btn-touch rounded-3 fw-semibold">
             📊 Export Excel
         </a>
     </div>

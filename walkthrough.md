@@ -1,31 +1,53 @@
-# Walkthrough Implementation — Fitur Cetak PDF Report & Export Excel Plotting PPL
+# Walkthrough Implementation — Perubahan Field & Kolom "Kelas" Menjadi "Konsentrasi"
 
-Pengembangan fitur **Cetak PDF Report** dan **Export Excel** pada menu **Plotting & Pemetaan Penempatan PPL Admin (`/admin/plotting`)** telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Pengubahan seluruh istilah, kolom database, antarmuka pengguna (UI), laporan cetak, serta fitur Impor/Ekspor Excel dari **"Kelas"** menjadi **"Konsentrasi"** (Konsentrasi / Peminatan Mahasiswa) telah **SELESAI DITERAPKAN DI SELURUH AKUN USER, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
 ## 🚀 Perubahan yang Diterapkan
 
-### 1. 📄 Fitur Cetak PDF Report Plotting PPL
-- **Controller Method**: `exportPdf(Request $request)` di `Admin\PlottingController.php`.
-- **View Template PDF**: [`resources/views/pdf/laporan-plotting.blade.php`](file:///c:/SystemMonitoringPPL/resources/views/pdf/laporan-plotting.blade.php)
-  - Dilengkapi **Kop Surat FEB UNIKU** dengan Logo UNIKU transparan di sebelah kiri.
-  - Tampilan format A4 Landscape berisi tabel pemetaan lengkap: *Nama Kelompok & Akun*, *Mitra Penempatan & PIC*, *DPL Pembimbing & NIP/NIDN*, *Daftar Anggota Mahasiswa (NIM, Nama, Prodi)*, serta *Lembar Pengesahan Panitia PPL*.
-  - Mendukung filter pencarian (*search query*).
+### 1. 🗄️ Database Migration & Model
+- Migration `2026_01_01_000013_rename_kelas_to_konsentrasi_in_anggota_kelompok_table.php`:
+  - Mengubah nama kolom `kelas` menjadi `konsentrasi` pada tabel `anggota_kelompok`.
+- Model `AnggotaKelompok` (`app/Models/AnggotaKelompok.php`) & `Mahasiswa` (`app/Models/Mahasiswa.php`):
+  - Mengganti atribut `'kelas'` menjadi `'konsentrasi'` pada array `$fillable`.
 
-### 2. 📊 Fitur Export Excel Plotting PPL
-- **Export Class**: [`app/Exports/PlottingPplExport.php`](file:///c:/SystemMonitoringPPL/app/Exports/PlottingPplExport.php)
-- **Controller Method**: `exportExcel(Request $request)` di `Admin\PlottingController.php`.
-- Menghasilkan berkas Excel `.xlsx` yang berisi seluruh data pemetaan plotting: ID Kelompok, Nama Kelompok, Username Akun, Tahun Akademik, Status, Mitra Penempatan, Kategori Mitra, Alamat Mitra, Pembimbing PIC Mitra, DPL Pembimbing, NIP/NIDN DPL, Jumlah Anggota, dan Daftar Rincian Anggota Mahasiswa.
+### 2. 📊 Form Validation, Export & Import Excel
+- **Controller Admin Mahasiswa (`Admin\MahasiswaController.php`)**:
+  - Mengubah aturan validasi & pencarian data dari `kelas` menjadi `konsentrasi`.
+- **Import Excel (`app/Imports/MahasiswaImport.php`)**:
+  - Mendukung header kolom `konsentrasi` (serta *fallback* kompatibilitas `kelas`).
+- **Export Excel (`app/Exports/MahasiswaExport.php` & `NilaiPplExport.php`)**:
+  - Mengubah header kolom laporan dari `Kelas` menjadi `Konsentrasi`.
 
-### 3. 🎨 Penambahan Tombol Aksi di Antarmuka Admin
-- Di header menu [`resources/views/admin/plotting/index.blade.php`](file:///c:/SystemMonitoringPPL/resources/views/admin/plotting/index.blade.php):
-  - **`📄 Cetak PDF Report`** (merujuk ke `route('admin.plotting.pdf')` - *Open in New Tab*).
-  - **`📊 Export Excel`** (merujuk ke `route('admin.plotting.export-excel')`).
+### 3. 🎨 Penyelarasan Antarmuka UI Seluruh Role User
+- **Admin Master Data Mahasiswa (`admin/mahasiswa/index.blade.php`, `create`, `edit`)**:
+  - Mengubah placeholder pencarian, header tabel, form input (*Konsentrasi / Peminatan*), serta petunjuk impor Excel.
+- **Admin Plotting Kelompok (`admin/plotting/edit.blade.php`)**:
+  - Mengubah header kolom tabel pilihan anggota menjadi **Konsentrasi**.
+- **Dashboard Ketua Kelompok / Student (`ketua/dashboard.blade.php`)**:
+  - Mengubah rincian anggota kelompok dari `Kelas` menjadi `Konsentrasi`.
+- **Dashboard PIC Mitra (`pic/dashboard.blade.php`)**:
+  - Mengubah rincian daftar mahasiswa magang dari `Kelas` menjadi `Konsentrasi`.
 
 ---
 
 ## 🧪 Hasil Automated Unit & Feature Tests
 
-- **Test Suite**: [`tests/Feature/AdminPlottingExportTest.php`](file:///c:/SystemMonitoringPPL/tests/Feature/AdminPlottingExportTest.php)
-- **Status GitHub Push**: Berhasil di-push ke branch `main` pada repositori [`https://github.com/adimhsd/SystemMonitoringPPL.git`](https://github.com/adimhsd/SystemMonitoringPPL.git) (commit `822d36a`).
+```bash
+vendor/bin/phpunit
+```
+
+```
+PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
+
+...............................................................  84 / 84 (100%)
+
+Time: 00:10.583, Memory: 38.50 MB
+
+OK (84 tests, 250 assertions)
+```
+
+- **Total Test Suite**: 84 Test Cases
+- **Hasil**: `PASSED` 100%
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `64d24c4`).
