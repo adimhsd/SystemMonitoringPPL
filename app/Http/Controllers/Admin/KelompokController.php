@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\KelompokExport;
+use App\Exports\KelompokTemplateExport;
 use App\Http\Controllers\Controller;
+use App\Imports\KelompokImport;
 use App\Models\KelompokPpl;
+use App\Models\Mahasiswa;
 use App\Models\Mitra;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelompokController extends Controller
 {
@@ -40,7 +45,20 @@ class KelompokController extends Controller
 
         $kelompokList = $query->latest()->paginate(20)->withQueryString();
 
-        return view('admin.kelompok.index', compact('kelompokList'));
+        // Ringkasan Statistik Data Kelompok PPL
+        $statsSummary = [
+            'total_kelompok' => KelompokPpl::count(),
+            'kelompok_aktif' => KelompokPpl::where('status', 'aktif')->count(),
+            'kelompok_selesai' => KelompokPpl::where('status', 'selesai')->count(),
+            'kelompok_ber_dpl' => KelompokPpl::whereNotNull('dpl_id')->count(),
+            'kelompok_tanpa_dpl' => KelompokPpl::whereNull('dpl_id')->count(),
+            'kelompok_ber_mitra' => KelompokPpl::whereNotNull('mitra_id')->count(),
+            'kelompok_tanpa_mitra' => KelompokPpl::whereNull('mitra_id')->count(),
+            'kelompok_lengkap' => KelompokPpl::whereNotNull('dpl_id')->whereNotNull('mitra_id')->whereHas('anggota')->count(),
+            'total_anggota' => Mahasiswa::whereNotNull('kelompok_id')->count(),
+        ];
+
+        return view('admin.kelompok.index', compact('kelompokList', 'statsSummary'));
     }
 
     /**
@@ -173,5 +191,45 @@ class KelompokController extends Controller
 
         return redirect()->route('admin.kelompok.index')
             ->with('success', 'Akun & Data Kelompok PPL berhasil dihapus.');
+    }
+
+    /**
+     * Export Excel Data Kelompok PPL.
+     */
+    public function exportExcel()
+    {
+        return Excel::download(new KelompokExport, 'Master_Data_Kelompok_PPL.xlsx');
+    }
+
+    /**
+     * Download Template Excel Import Kelompok PPL.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new KelompokTemplateExport, 'Template_Import_Kelompok_PPL.xlsx');
+    }
+
+    /**
+     * Import Excel Data Kelompok PPL.
+     */
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file_excel' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'],
+        ], [
+            'file_excel.required' => 'File Excel wajib diunggah.',
+            'file_excel.mimes' => 'Format file harus berupa .xlsx, .xls, atau .csv.',
+            'file_excel.max' => 'Ukuran file Excel maksimal 5MB.',
+        ]);
+
+        try {
+            Excel::import(new KelompokImport, $request->file('file_excel'));
+
+            return redirect()->route('admin.kelompok.index')
+                ->with('success', 'Data Kelompok PPL dari file Excel berhasil diimpor ke sistem.');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.kelompok.index')
+                ->with('error', 'Gagal mengimpor file Excel Kelompok: ' . $e->getMessage());
+        }
     }
 }

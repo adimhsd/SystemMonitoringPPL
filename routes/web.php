@@ -78,7 +78,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/mitra/export', [AdminMitraController::class, 'exportExcel'])->name('mitra.export');
             Route::get('/mitra/template', [AdminMitraController::class, 'downloadTemplate'])->name('mitra.template');
             Route::post('/mitra/import', [AdminMitraController::class, 'importExcel'])->name('mitra.import');
-            Route::resource('mitra', AdminMitraController::class);
+            Route::get('/kelompok/export', [AdminKelompokController::class, 'exportExcel'])->name('kelompok.export');
+            Route::get('/kelompok/template', [AdminKelompokController::class, 'downloadTemplate'])->name('kelompok.template');
+            Route::post('/kelompok/import', [AdminKelompokController::class, 'importExcel'])->name('kelompok.import');
             Route::get('/kelompok/{kelompok}/logbook-pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('kelompok.logbook.pdf');
             Route::resource('kelompok', AdminKelompokController::class);
             

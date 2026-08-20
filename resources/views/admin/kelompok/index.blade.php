@@ -3,18 +3,95 @@
 @section('title', 'Data Kelompok PPL')
 
 @section('content')
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
+<div class="mb-4">
+    <div class="mb-3">
         <h4 class="fw-bold mb-1">Data Master & Akun Kelompok PPL</h4>
-        <p class="text-muted mb-0 fs-7">Kelola akun kelompok mandiri (kredensial login) yang digunakan oleh seluruh mahasiswa anggota kelompok PPL.</p>
+        <p class="text-muted mb-0 fs-7">Kelola akun kelompok mandiri (kredensial login) yang digunakan oleh seluruh mahasiswa anggota kelompok PPL, serta fitur ekspor/impor Excel.</p>
     </div>
-    <div class="d-flex gap-2">
-        <a href="{{ route('admin.kelompok.create') }}" class="btn btn-primary btn-touch rounded-3 fw-semibold">
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ route('admin.kelompok.create') }}" class="btn btn-primary btn-touch text-white rounded-3 fw-semibold">
             + Buat Akun Kelompok
         </a>
-        <a href="{{ route('admin.plotting.index') }}" class="btn btn-outline-success btn-touch rounded-3 fw-semibold">
+        <a href="{{ route('admin.plotting.index') }}" class="btn btn-outline-info btn-touch rounded-3 fw-semibold">
             🗺️ Plotting Kelompok
         </a>
+        <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcelKelompok">
+            📥 Impor Excel
+        </button>
+        <a href="{{ route('admin.kelompok.export') }}" class="btn btn-outline-secondary btn-touch rounded-3 fw-semibold">
+            📊 Export Excel
+        </a>
+    </div>
+</div>
+
+<!-- Ringkasan Statistik Data Kelompok PPL Header Cards -->
+<div class="row g-3 mb-4">
+    <!-- Stat Card 1: Total Kelompok & Status -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-primary h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-primary fs-7 fw-bold">Total Kelompok PPL</span>
+                <span class="fs-4">👥</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_kelompok'] }} <span class="fs-6 text-muted font-normal">Kelompok</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8 text-secondary">
+                <span>🟢 Aktif: {{ $statsSummary['kelompok_aktif'] }}</span>
+                <span>🏁 Selesai: {{ $statsSummary['kelompok_selesai'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 2: Penugasan DPL -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-success h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-success fs-7 fw-bold">Penugasan DPL Pembimbing</span>
+                <span class="fs-4">👨‍🏫</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['kelompok_ber_dpl'] }} <span class="fs-6 text-muted font-normal">Ber-DPL</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">✅ Ber-DPL: {{ $statsSummary['kelompok_ber_dpl'] }}</span>
+                <span class="text-warning fw-semibold">⚠️ Tanpa DPL: {{ $statsSummary['kelompok_tanpa_dpl'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 3: Penugasan Mitra -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-info h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-info fs-7 fw-bold">Penempatan Mitra</span>
+                <span class="fs-4">🏢</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['kelompok_ber_mitra'] }} <span class="fs-6 text-muted font-normal">Ber-Mitra</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-info fw-semibold">📌 Ber-Mitra: {{ $statsSummary['kelompok_ber_mitra'] }}</span>
+                <span class="text-secondary fw-semibold">⏳ Belum: {{ $statsSummary['kelompok_tanpa_mitra'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 4: Total Anggota & Kelengkapan Plotting -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-warning h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-warning fs-7 fw-bold">Kelengkapan Plotting</span>
+                <span class="fs-4">🎓</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_anggota'] }} <span class="fs-6 text-muted font-normal">Mahasiswa</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">⭐ Plot Lengkap: {{ $statsSummary['kelompok_lengkap'] }}</span>
+                <span class="text-primary fw-semibold">🎓 Total Anggota: {{ $statsSummary['total_anggota'] }}</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -126,6 +203,53 @@
     </div>
     <div>
         {{ $kelompokList->links() }}
+    </div>
+</div>
+
+<!-- Modal Impor Excel Kelompok -->
+<div class="modal fade" id="modalImportExcelKelompok" tabindex="-1" aria-labelledby="modalImportExcelKelompokLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-custom">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold" id="modalImportExcelKelompokLabel">📥 Impor Data Kelompok PPL dari Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.kelompok.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body fs-7">
+                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) sesuai dengan format template resmi Kelompok PPL.</p>
+
+                    <div class="mb-3">
+                        <a href="{{ route('admin.kelompok.template') }}" class="btn btn-sm btn-light border text-primary fw-semibold w-100 py-2">
+                            📥 Download Template Resmi Impor Kelompok (.xlsx)
+                        </a>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 mb-3 border fs-8">
+                        <strong class="d-block mb-1 text-dark">📋 Urutan Kolom Template Impor Kelompok:</strong>
+                        <ol class="mb-0 ps-3 text-secondary">
+                            <li><code>ID Kelompok</code> (Dikosongkan saat tambah data baru)</li>
+                            <li><code>Nama Kelompok</code> (Wajib)</li>
+                            <li><code>Tahun Akademik</code> (Contoh: <code>2026/2027</code>)</li>
+                            <li><code>Status Kelompok</code> (<code>aktif</code> / <code>selesai</code>)</li>
+                            <li><code>Username Ketua</code> (Username akun login kelompok)</li>
+                            <li><code>Password Ketua</code> (Default: <code>password123</code> jika dikosongkan)</li>
+                            <li><code>Nama DPL</code> (Opsional, dicari berdasarkan NIP/Nama)</li>
+                            <li><code>Nama Mitra</code> (Opsional, dicari berdasarkan Nama Mitra)</li>
+                        </ol>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="file_excel_kelompok" class="form-label fw-semibold text-secondary">Pilih Berkas Excel:</label>
+                        <input type="file" name="file_excel" id="file_excel_kelompok" class="form-control" accept=".xlsx,.xls,.csv" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success btn-sm rounded-pill px-3 fw-semibold">Unggah & Impor Data</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
