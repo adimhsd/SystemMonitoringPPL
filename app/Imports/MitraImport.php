@@ -55,17 +55,28 @@ class MitraImport implements ToModel, WithHeadingRow
                 $namaPic = 'PIC ' . $namaMitra;
             }
 
-            $picUser = User::updateOrCreate(
-                ['username' => $usernamePic],
-                [
+            $picUser = User::withTrashed()->where('username', $usernamePic)->first();
+            if ($picUser) {
+                if ($picUser->trashed()) {
+                    $picUser->restore();
+                }
+                $picUser->update([
+                    'role' => 'pic_mitra',
+                    'nama_lengkap' => $namaPic,
+                    'no_hp' => $noHpPic ?? $picUser->no_hp,
+                    'is_active' => true,
+                ]);
+            } else {
+                $picUser = User::create([
+                    'username' => $usernamePic,
                     'password' => Hash::make('password123'),
                     'role' => 'pic_mitra',
                     'nama_lengkap' => $namaPic,
                     'no_hp' => $noHpPic,
                     'must_change_password' => true,
                     'is_active' => true,
-                ]
-            );
+                ]);
+            }
 
             $picUserId = $picUser->id;
         }

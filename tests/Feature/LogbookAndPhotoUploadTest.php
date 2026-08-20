@@ -11,10 +11,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 
 use Tests\TestCase;
+use Tests\Traits\CreatesTestPplData;
 
 class LogbookAndPhotoUploadTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesTestPplData;
 
     protected User $ketuaUser;
     protected KelompokPpl $kelompok;
@@ -23,9 +24,10 @@ class LogbookAndPhotoUploadTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->createTestPplData();
 
-        $this->ketuaUser = User::where('role', 'ketua_kelompok')->first();
-        $this->kelompok = KelompokPpl::where('ketua_user_id', $this->ketuaUser->id)->first();
+        $this->ketuaUser = $this->ketuaUser;
+        $this->kelompok = $this->testKelompok;
     }
 
     public function test_ketua_can_access_logbook_create_page(): void

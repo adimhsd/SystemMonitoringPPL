@@ -9,10 +9,11 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
+use Tests\Traits\CreatesTestPplData;
 
 class LuaranSummaryStatsTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesTestPplData;
 
     protected User $admin;
 
@@ -20,8 +21,9 @@ class LuaranSummaryStatsTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->createTestPplData();
 
-        $this->admin = User::where('role', 'admin')->first();
+        $this->admin = $this->adminUser;
     }
 
     public function test_admin_luaran_page_renders_summary_stat_cards(): void

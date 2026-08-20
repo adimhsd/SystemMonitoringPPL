@@ -9,10 +9,11 @@ use App\Models\PenilaianPpl;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreatesTestPplData;
 
 class PenilaianDualSourceTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesTestPplData;
 
     protected User $dpl;
     protected User $pic;
@@ -23,19 +24,25 @@ class PenilaianDualSourceTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->createTestPplData();
 
-        $this->dpl = User::where('role', 'dpl')->first();
-        $this->pic = User::where('role', 'pic_mitra')->first();
-        $this->kelompok = KelompokPpl::first();
+        $this->dpl = $this->dplUser;
+        $this->pic = $this->picUser;
+        $this->kelompok = $this->testKelompok;
 
         // Ensure this kelompok is linked to this DPL and PIC
-        $mitra = Mitra::where('pic_user_id', $this->pic->id)->first();
         $this->kelompok->update([
             'dpl_id' => $this->dpl->id,
-            'mitra_id' => $mitra->id,
+            'mitra_id' => $this->testMitra->id,
         ]);
 
-        $this->mhs = AnggotaKelompok::where('kelompok_id', $this->kelompok->id)->first();
+        $this->mhs = AnggotaKelompok::where('kelompok_id', $this->kelompok->id)->first() ?? AnggotaKelompok::create([
+            'kelompok_id' => $this->kelompok->id,
+            'nim' => '2026000001',
+            'nama' => 'Mahasiswa Test',
+            'prodi' => 'Bisnis Digital',
+            'konsentrasi' => 'Pemasaran Digital',
+        ]);
     }
 
     public function test_pic_mitra_can_input_mitra_scores_sixty_percent(): void

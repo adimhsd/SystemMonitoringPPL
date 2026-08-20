@@ -6,10 +6,11 @@ use App\Models\Notifikasi;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreatesTestPplData;
 
 class NotificationAndSecurityTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesTestPplData;
 
     protected User $user;
     protected Notifikasi $notif;
@@ -18,8 +19,9 @@ class NotificationAndSecurityTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->createTestPplData();
 
-        $this->user = User::where('role', 'ketua_kelompok')->first();
+        $this->user = $this->ketuaUser;
         $this->notif = Notifikasi::create([
             'user_id' => $this->user->id,
             'judul' => 'Notifikasi Pengujian Security',

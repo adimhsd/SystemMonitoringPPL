@@ -46,7 +46,13 @@ class PicLogbookShowRouteTest extends TestCase
             'is_active' => true,
         ]);
 
-        $dpl = User::where('role', 'dpl')->first();
+        $dpl = User::where('role', 'dpl')->first() ?? User::create([
+            'username' => 'dpl_test_route',
+            'password' => Hash::make('password'),
+            'role' => 'dpl',
+            'nama_lengkap' => 'DPL Route Test',
+            'is_active' => true,
+        ]);
 
         $kelompok = KelompokPpl::create([
             'nama_kelompok' => 'Kelompok Route Test',

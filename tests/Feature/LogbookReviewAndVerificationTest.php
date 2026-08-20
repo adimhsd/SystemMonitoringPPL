@@ -8,10 +8,11 @@ use App\Models\Mitra;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreatesTestPplData;
 
 class LogbookReviewAndVerificationTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesTestPplData;
 
     protected User $dpl;
     protected User $pic;
@@ -21,10 +22,21 @@ class LogbookReviewAndVerificationTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->createTestPplData();
 
-        $this->dpl = User::where('role', 'dpl')->first();
-        $this->pic = User::where('role', 'pic_mitra')->first();
-        $this->logbook = KegiatanHarian::first();
+        $this->dpl = $this->dplUser;
+        $this->pic = $this->picUser;
+        $this->logbook = KegiatanHarian::first() ?? KegiatanHarian::create([
+            'kelompok_id' => $this->testKelompok->id,
+            'tanggal' => now()->format('Y-m-d'),
+            'waktu_mulai' => '08:00:00',
+            'waktu_selesai' => '16:00:00',
+            'deskripsi_kegiatan' => 'Kegiatan test PPL',
+            'foto_dokumentasi' => 'logbooks/sample_foto.jpg',
+            'dilihat_mitra' => false,
+            'dilihat_dpl' => false,
+            'terlambat' => false,
+        ]);
     }
 
     public function test_dpl_can_view_assigned_group_logbooks(): void
