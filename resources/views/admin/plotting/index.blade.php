@@ -3,8 +3,8 @@
 @section('title', 'Plotting Kelompok PPL')
 
 @section('content')
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
+<div class="mb-4">
+    <div class="mb-3">
         <h4 class="fw-bold mb-1">Plotting & Pemetaan Kelompok PPL</h4>
         <p class="text-muted mb-0 fs-7">Pemetaan penempatan antara <strong>Kelompok PPL</strong>, <strong>Mitra Instansi</strong>, <strong>Dosen Pembimbing (DPL)</strong>, dan <strong>Mahasiswa Anggota</strong> (1–10 mahasiswa per kelompok).</p>
     </div>

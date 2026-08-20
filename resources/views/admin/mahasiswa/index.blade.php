@@ -3,8 +3,8 @@
 @section('title', 'Master Data Mahasiswa')
 
 @section('content')
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
+<div class="mb-4">
+    <div class="mb-3">
         <h4 class="fw-bold mb-1">Master Data Mahasiswa</h4>
         <p class="text-muted mb-0 fs-7">Kelola daftar seluruh mahasiswa peserta PPL FEB UNIKU, jenis kelamin, status penempatan kelompok, serta fitur impor/ekspor Excel.</p>
     </div>

@@ -1,34 +1,21 @@
-# Walkthrough Implementation — Perubahan Field & Kolom "Kelas" Menjadi "Konsentrasi"
+# Walkthrough Implementation — Fitur Cetak PDF Report Master Data Mahasiswa
 
-Pengubahan seluruh istilah, kolom database, antarmuka pengguna (UI), laporan cetak, serta fitur Impor/Ekspor Excel dari **"Kelas"** menjadi **"Konsentrasi"** (Konsentrasi / Peminatan Mahasiswa) telah **SELESAI DITERAPKAN DI SELURUH AKUN USER, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
+Pengembangan fitur **Cetak PDF Report** pada menu **Master Data Mahasiswa Admin (`/admin/mahasiswa`)** telah **SELESAI DITERAPKAN, DIVERIFIKASI, DAN DIPUSH KE GITHUB 100%**.
 
 ---
 
 ## 🚀 Perubahan yang Diterapkan
 
-### 1. 🗄️ Database Migration & Model
-- Migration `2026_01_01_000013_rename_kelas_to_konsentrasi_in_anggota_kelompok_table.php`:
-  - Mengubah nama kolom `kelas` menjadi `konsentrasi` pada tabel `anggota_kelompok`.
-- Model `AnggotaKelompok` (`app/Models/AnggotaKelompok.php`) & `Mahasiswa` (`app/Models/Mahasiswa.php`):
-  - Mengganti atribut `'kelas'` menjadi `'konsentrasi'` pada array `$fillable`.
+### 1. 📄 Fitur Cetak PDF Report Master Data Mahasiswa
+- **Controller Method**: `exportPdf(Request $request)` di `Admin\MahasiswaController.php`.
+- **View Template PDF**: [`resources/views/pdf/laporan-mahasiswa.blade.php`](file:///c:/SystemMonitoringPPL/resources/views/pdf/laporan-mahasiswa.blade.php)
+  - Dilengkapi **Kop Surat Resmi FEB UNIKU** dengan Logo UNIKU transparan di sebelah kiri.
+  - Tampilan format A4 Landscape berisi ringkasan statistik (*Total Mahasiswa, Sudah Ada Kelompok, Belum Diplotkan*) serta tabel data lengkap (*NIM, Nama, Gender, Prodi, Konsentrasi, No. HP, dan Kelompok PPL*).
+  - Mendukung filter otomatis berdasarkan *Search Query*, *Program Studi*, *Jenis Kelamin*, dan *Status Plotting Kelompok*.
 
-### 2. 📊 Form Validation, Export & Import Excel
-- **Controller Admin Mahasiswa (`Admin\MahasiswaController.php`)**:
-  - Mengubah aturan validasi & pencarian data dari `kelas` menjadi `konsentrasi`.
-- **Import Excel (`app/Imports/MahasiswaImport.php`)**:
-  - Mendukung header kolom `konsentrasi` (serta *fallback* kompatibilitas `kelas`).
-- **Export Excel (`app/Exports/MahasiswaExport.php` & `NilaiPplExport.php`)**:
-  - Mengubah header kolom laporan dari `Kelas` menjadi `Konsentrasi`.
-
-### 3. 🎨 Penyelarasan Antarmuka UI Seluruh Role User
-- **Admin Master Data Mahasiswa (`admin/mahasiswa/index.blade.php`, `create`, `edit`)**:
-  - Mengubah placeholder pencarian, header tabel, form input (*Konsentrasi / Peminatan*), serta petunjuk impor Excel.
-- **Admin Plotting Kelompok (`admin/plotting/edit.blade.php`)**:
-  - Mengubah header kolom tabel pilihan anggota menjadi **Konsentrasi**.
-- **Dashboard Ketua Kelompok / Student (`ketua/dashboard.blade.php`)**:
-  - Mengubah rincian anggota kelompok dari `Kelas` menjadi `Konsentrasi`.
-- **Dashboard PIC Mitra (`pic/dashboard.blade.php`)**:
-  - Mengubah rincian daftar mahasiswa magang dari `Kelas` menjadi `Konsentrasi`.
+### 2. 🎨 Penambahan Tombol Aksi di Antarmuka Admin
+- Di header menu [`resources/views/admin/mahasiswa/index.blade.php`](file:///c:/SystemMonitoringPPL/resources/views/admin/mahasiswa/index.blade.php):
+  - **`📄 Cetak PDF Report`** (merujuk ke `route('admin.mahasiswa.pdf')` - *Open in New Tab*).
 
 ---
 
@@ -41,13 +28,13 @@ vendor/bin/phpunit
 ```
 PHPUnit 11.5.42 by Sebastian Bergmann and contributors.
 
-...............................................................  84 / 84 (100%)
+..................................................................... 85 / 85 (100%)
 
-Time: 00:10.583, Memory: 38.50 MB
+Time: 00:09.868, Memory: 38.50 MB
 
-OK (84 tests, 250 assertions)
+OK (85 tests, 253 assertions)
 ```
 
-- **Total Test Suite**: 84 Test Cases
+- **Total Test Suite**: 85 Test Cases
 - **Hasil**: `PASSED` 100%
-- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `64d24c4`).
+- **Status GitHub Push**: Pushed to `https://github.com/adimhsd/SystemMonitoringPPL.git` (commit `3afc6ff`).
