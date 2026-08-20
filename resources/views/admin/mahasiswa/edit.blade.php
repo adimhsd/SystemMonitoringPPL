@@ -61,9 +61,9 @@
 
                 <div class="row g-3 mb-3">
                     <div class="col-12 col-sm-6">
-                        <label for="kelas" class="form-label fw-semibold text-secondary fs-7">Kelas</label>
-                        <input type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" value="{{ old('kelas', $mahasiswa->kelas) }}">
-                        @error('kelas')
+                        <label for="konsentrasi" class="form-label fw-semibold text-secondary fs-7">Konsentrasi / Peminatan</label>
+                        <input type="text" class="form-control @error('konsentrasi') is-invalid @enderror" id="konsentrasi" name="konsentrasi" value="{{ old('konsentrasi', $mahasiswa->konsentrasi) }}" placeholder="Contoh: Manajemen Pemasaran / Keuangan">
+                        @error('konsentrasi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

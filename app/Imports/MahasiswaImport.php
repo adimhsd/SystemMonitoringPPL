@@ -39,8 +39,8 @@ class MahasiswaImport implements ToModel, WithHeadingRow
             default => 'Manajemen',
         };
 
-        // Normalisasi kelas, no_hp, alamat
-        $kelas = isset($row['kelas']) ? trim((string) $row['kelas']) : null;
+        // Normalisasi konsentrasi, no_hp, alamat
+        $konsentrasi = isset($row['konsentrasi']) ? trim((string) $row['konsentrasi']) : (isset($row['kelas']) ? trim((string) $row['kelas']) : null);
         $noHp = isset($row['no_hp_whatsapp']) ? trim((string) $row['no_hp_whatsapp']) : (isset($row['no_hp']) ? trim((string) $row['no_hp']) : null);
         $alamat = isset($row['alamat']) ? trim((string) $row['alamat']) : null;
 
@@ -67,7 +67,7 @@ class MahasiswaImport implements ToModel, WithHeadingRow
             'nama' => $nama,
             'jenis_kelamin' => $jenisKelamin,
             'prodi' => $prodi,
-            'kelas' => $kelas,
+            'konsentrasi' => $konsentrasi,
             'no_hp' => $noHp,
             'alamat' => $alamat,
         ];

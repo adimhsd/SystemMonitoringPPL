@@ -318,7 +318,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
                                         <strong class="text-dark d-block mb-0">{{ $mhs->nama }}</strong>
-                                        <span class="fs-8 text-muted">NIM: {{ $mhs->nim }} | {{ $mhs->prodi ?? 'FEB' }} ({{ $mhs->kelas ?? '-' }})</span>
+                                        <span class="fs-8 text-muted">NIM: {{ $mhs->nim }} | {{ $mhs->prodi ?? 'FEB' }} ({{ $mhs->konsentrasi ?? '-' }})</span>
                                     </div>
                                     <span class="badge bg-light text-dark border fs-8">
                                         {{ $mhs->jenis_kelamin === 'L' ? '👨 L' : '👩 P' }}

@@ -25,7 +25,7 @@
 <div class="card card-custom p-3 mb-4">
     <form action="{{ route('admin.mahasiswa.index') }}" method="GET" class="row g-2 align-items-center">
         <div class="col-12 col-md-3">
-            <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari Nama, NIM, Kelas, No HP..." value="{{ request('search') }}">
+            <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari Nama, NIM, Konsentrasi, No HP..." value="{{ request('search') }}">
         </div>
         <div class="col-6 col-md-3">
             <select name="prodi" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -64,7 +64,7 @@
                     <th class="ps-4">NIM & Nama</th>
                     <th>Jenis Kelamin</th>
                     <th>Program Studi</th>
-                    <th>Kelas</th>
+                    <th>Konsentrasi</th>
                     <th>No. HP</th>
                     <th>Alamat</th>
                     <th>Kelompok PPL</th>
@@ -94,7 +94,7 @@
                                 {{ $mhs->prodi }}
                             </span>
                         </td>
-                        <td>{{ $mhs->kelas ?? '-' }}</td>
+                        <td>{{ $mhs->konsentrasi ?? '-' }}</td>
                         <td>
                             @if($mhs->no_hp)
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $mhs->no_hp) }}" target="_blank" class="text-decoration-none text-success fw-semibold">
@@ -170,7 +170,7 @@
                             <li><code>nama_mahasiswa</code> / <code>nama</code> : Nama Lengkap Mahasiswa</li>
                             <li><code>jenis_kelamin</code> / <code>jk</code> : Laki-laki / Perempuan (L / P)</li>
                             <li><code>program_studi</code> / <code>prodi</code> : Manajemen / Akuntansi / Bisnis Digital</li>
-                            <li><code>kelas</code> : Kelas (opsional, contoh: Reguler A)</li>
+                            <li><code>konsentrasi</code> / <code>kelas</code> : Konsentrasi / Peminatan (opsional)</li>
                             <li><code>no_hp_whatsapp</code> / <code>no_hp</code> : Nomor Telepon/WA (opsional)</li>
                             <li><code>alamat</code> : Alamat Rumah (opsional)</li>
                         </ul>

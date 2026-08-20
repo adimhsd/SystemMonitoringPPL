@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('anggota_kelompok', function (Blueprint $table) {
-            if (!Schema::hasColumn('anggota_kelompok', 'kelas')) {
-                $table->string('kelas', 50)->nullable()->after('prodi');
+            if (!Schema::hasColumn('anggota_kelompok', 'konsentrasi') && !Schema::hasColumn('anggota_kelompok', 'kelas')) {
+                $table->string('konsentrasi', 50)->nullable()->after('prodi');
             }
             if (!Schema::hasColumn('anggota_kelompok', 'no_hp')) {
-                $table->string('no_hp', 20)->nullable()->after('kelas');
+                $table->string('no_hp', 20)->nullable();
             }
             if (!Schema::hasColumn('anggota_kelompok', 'alamat')) {
-                $table->text('alamat')->nullable()->after('no_hp');
+                $table->text('alamat')->nullable();
             }
         });
     }
@@ -35,6 +35,9 @@ return new class extends Migration
             }
             if (Schema::hasColumn('anggota_kelompok', 'no_hp')) {
                 $table->dropColumn('no_hp');
+            }
+            if (Schema::hasColumn('anggota_kelompok', 'konsentrasi')) {
+                $table->dropColumn('konsentrasi');
             }
             if (Schema::hasColumn('anggota_kelompok', 'kelas')) {
                 $table->dropColumn('kelas');

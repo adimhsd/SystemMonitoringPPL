@@ -17,7 +17,7 @@ class Mahasiswa extends Model
         'nama',
         'jenis_kelamin',
         'prodi',
-        'kelas',
+        'konsentrasi',
         'no_hp',
         'alamat',
     ];

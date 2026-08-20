@@ -75,7 +75,7 @@
                                     <th>Nama Mahasiswa</th>
                                     <th>Gender</th>
                                     <th>Program Studi</th>
-                                    <th>Kelas</th>
+                                    <th>Konsentrasi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,7 +93,7 @@
                                             <span class="fs-8 text-secondary">{{ $mhs->jenis_kelamin }}</span>
                                         </td>
                                         <td><span class="badge bg-light text-dark border">{{ $mhs->prodi }}</span></td>
-                                        <td>{{ $mhs->kelas ?? '-' }}</td>
+                                        <td>{{ $mhs->konsentrasi ?? '-' }}</td>
                                     </tr>
                                 @empty
                                     <tr>

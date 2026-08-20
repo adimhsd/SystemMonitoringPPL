@@ -41,7 +41,7 @@ class MahasiswaController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
                   ->orWhere('nim', 'like', "%{$search}%")
-                  ->orWhere('kelas', 'like', "%{$search}%")
+                  ->orWhere('konsentrasi', 'like', "%{$search}%")
                   ->orWhere('no_hp', 'like', "%{$search}%");
             });
         }
@@ -72,7 +72,7 @@ class MahasiswaController extends Controller
             'nama' => ['required', 'string', 'max:100'],
             'jenis_kelamin' => ['required', Rule::in(['Laki-laki', 'Perempuan'])],
             'prodi' => ['required', Rule::in(['Manajemen', 'Akuntansi', 'Bisnis Digital'])],
-            'kelas' => ['nullable', 'string', 'max:50'],
+            'konsentrasi' => ['nullable', 'string', 'max:50'],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
             'kelompok_id' => ['nullable', 'exists:kelompok_ppl,id'],
@@ -89,7 +89,7 @@ class MahasiswaController extends Controller
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
             'prodi' => $request->prodi,
-            'kelas' => $request->kelas,
+            'konsentrasi' => $request->konsentrasi,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
             'kelompok_id' => $request->kelompok_id,
@@ -119,7 +119,7 @@ class MahasiswaController extends Controller
             'nama' => ['required', 'string', 'max:100'],
             'jenis_kelamin' => ['required', Rule::in(['Laki-laki', 'Perempuan'])],
             'prodi' => ['required', Rule::in(['Manajemen', 'Akuntansi', 'Bisnis Digital'])],
-            'kelas' => ['nullable', 'string', 'max:50'],
+            'konsentrasi' => ['nullable', 'string', 'max:50'],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
             'kelompok_id' => ['nullable', 'exists:kelompok_ppl,id'],
@@ -130,7 +130,7 @@ class MahasiswaController extends Controller
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
             'prodi' => $request->prodi,
-            'kelas' => $request->kelas,
+            'konsentrasi' => $request->konsentrasi,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
             'kelompok_id' => $request->kelompok_id,

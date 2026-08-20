@@ -40,7 +40,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Budi Santoso',
             'jenis_kelamin' => 'Laki-laki',
             'prodi' => 'Bisnis Digital',
-            'kelas' => 'Reguler A',
+            'konsentrasi' => 'Manajemen Keuangan',
             'no_hp' => '081299998888',
             'alamat' => 'Jl. Siliwangi No. 10 Kuningan',
             'kelompok_id' => $this->kelompok->id,
@@ -52,7 +52,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Budi Santoso',
             'jenis_kelamin' => 'Laki-laki',
             'prodi' => 'Bisnis Digital',
-            'kelas' => 'Reguler A',
+            'konsentrasi' => 'Manajemen Keuangan',
             'no_hp' => '081299998888',
             'kelompok_id' => $this->kelompok->id,
         ]);
@@ -67,7 +67,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Siti Nurhaliza',
             'jenis_kelamin' => 'Perempuan',
             'prodi' => 'Akuntansi',
-            'kelas' => 'Karyawan B',
+            'konsentrasi' => 'Pemasaran Digital',
             'no_hp' => '089911112222',
             'alamat' => 'Alamat baru',
             'kelompok_id' => null,
@@ -79,7 +79,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Siti Nurhaliza',
             'jenis_kelamin' => 'Perempuan',
             'prodi' => 'Akuntansi',
-            'kelas' => 'Karyawan B',
+            'konsentrasi' => 'Pemasaran Digital',
         ]);
     }
 
@@ -111,7 +111,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama_mahasiswa' => 'Mahasiswa Test Impor Kelompok',
             'jenis_kelamin' => 'Perempuan',
             'program_studi' => 'Bisnis Digital',
-            'kelas' => 'Reguler B',
+            'konsentrasi' => 'Akuntansi Syariah',
             'no_hp_whatsapp' => '087711223344',
             'alamat' => 'Jl. Veteran Kuningan',
             'kelompok_ppl' => $this->kelompok->nama_kelompok . ' - BAPPEDA',
@@ -122,7 +122,7 @@ class AdminMahasiswaMasterDataTest extends TestCase
             'nama' => 'Mahasiswa Test Impor Kelompok',
             'jenis_kelamin' => 'Perempuan',
             'prodi' => 'Bisnis Digital',
-            'kelas' => 'Reguler B',
+            'konsentrasi' => 'Akuntansi Syariah',
             'no_hp' => '087711223344',
             'kelompok_id' => $this->kelompok->id,
         ]);
