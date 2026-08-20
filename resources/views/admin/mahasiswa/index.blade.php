@@ -24,6 +24,77 @@
     </div>
 </div>
 
+<!-- Ringkasan Statistik Data Mahasiswa Header Cards -->
+<div class="row g-3 mb-4">
+    <!-- Stat Card 1: Total Mahasiswa & Gender -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-primary h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-primary fs-7 fw-bold">Total Mahasiswa PPL</span>
+                <span class="fs-4">🎓</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_mahasiswa'] }} <span class="fs-6 text-muted font-normal">Mahasiswa</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-info fw-semibold">👨 L: {{ $statsSummary['laki_laki'] }}</span>
+                <span class="text-danger fw-semibold">👩 P: {{ $statsSummary['perempuan'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 2: Status Plotting Kelompok -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-success h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-success fs-7 fw-bold">Status Plotting</span>
+                <span class="fs-4">🏢</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['assigned'] }} <span class="fs-6 text-muted font-normal">/ {{ $statsSummary['total_mahasiswa'] }}</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">✅ Diplotkan: {{ $statsSummary['assigned'] }}</span>
+                <span class="text-warning fw-semibold">⏳ Belum: {{ $statsSummary['unassigned'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 3: Sebaran Program Studi -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-info h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-info fs-7 fw-bold">Sebaran Prodi</span>
+                <span class="fs-4">📊</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1 fs-6 mt-1">
+                Manajemen: {{ $statsSummary['prodi_manajemen'] }}
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-secondary fw-semibold">Akuntansi: {{ $statsSummary['prodi_akuntansi'] }}</span>
+                <span class="text-primary fw-semibold">Bisnis Digital: {{ $statsSummary['prodi_bisnis_digital'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 4: Kontak WhatsApp -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-warning h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-warning fs-7 fw-bold">Kontak WhatsApp</span>
+                <span class="fs-4">💬</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['memiliki_hp'] }} <span class="fs-6 text-muted font-normal">/ {{ $statsSummary['total_mahasiswa'] }}</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">💬 Ada WA: {{ $statsSummary['memiliki_hp'] }}</span>
+                <span class="text-muted fw-semibold">⚠️ Belum: {{ $statsSummary['tanpa_hp'] }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Search & Filter Card -->
 <div class="card card-custom p-3 mb-4">
     <form action="{{ route('admin.mahasiswa.index') }}" method="GET" class="row g-2 align-items-center">

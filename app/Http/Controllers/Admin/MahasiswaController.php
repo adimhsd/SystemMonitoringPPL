@@ -51,7 +51,23 @@ class MahasiswaController extends Controller
         $mahasiswaList = $query->latest()->paginate(15)->withQueryString();
         $kelompokList = KelompokPpl::all();
 
-        return view('admin.mahasiswa.index', compact('mahasiswaList', 'kelompokList'));
+        // Ringkasan Statistik Data Mahasiswa
+        $statsSummary = [
+            'total_mahasiswa' => Mahasiswa::count(),
+            'laki_laki' => Mahasiswa::where('jenis_kelamin', 'Laki-laki')->count(),
+            'perempuan' => Mahasiswa::where('jenis_kelamin', 'Perempuan')->count(),
+            'assigned' => Mahasiswa::whereNotNull('kelompok_id')->count(),
+            'unassigned' => Mahasiswa::whereNull('kelompok_id')->count(),
+            'prodi_manajemen' => Mahasiswa::where('prodi', 'Manajemen')->count(),
+            'prodi_akuntansi' => Mahasiswa::where('prodi', 'Akuntansi')->count(),
+            'prodi_bisnis_digital' => Mahasiswa::where('prodi', 'Bisnis Digital')->count(),
+            'memiliki_hp' => Mahasiswa::whereNotNull('no_hp')->where('no_hp', '!=', '')->count(),
+            'tanpa_hp' => Mahasiswa::where(function ($q) {
+                $q->whereNull('no_hp')->orWhere('no_hp', '');
+            })->count(),
+        ];
+
+        return view('admin.mahasiswa.index', compact('mahasiswaList', 'kelompokList', 'statsSummary'));
     }
 
     /**
