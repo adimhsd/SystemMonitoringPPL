@@ -39,10 +39,9 @@ class AdminMasterDataAndPlottingTest extends TestCase
             'nama_mitra' => 'Dinas Pendidikan Kuningan',
             'kategori' => 'SKPD',
             'alamat' => 'Jl. Siliwangi No. 10',
-            'pic_option' => 'new',
-            'new_pic_username' => 'pic_disdik',
-            'new_pic_nama' => 'Bambang Sukses',
-            'new_pic_hp' => '081299998888',
+            'pic_nama' => 'Bambang Sukses',
+            'pic_username' => 'pic_disdik',
+            'pic_no_hp' => '081299998888',
         ]);
 
         $response->assertRedirect('/admin/mitra');

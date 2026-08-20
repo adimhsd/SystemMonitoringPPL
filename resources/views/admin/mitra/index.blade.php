@@ -3,8 +3,8 @@
 @section('title', 'Master Data Mitra')
 
 @section('content')
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
+<div class="mb-4">
+    <div class="mb-3">
         <h4 class="fw-bold mb-1">Master Data Mitra PPL</h4>
         <p class="text-muted mb-0 fs-7">Kelola instansi SKPD, perusahaan swasta, dan UMKM tempat magang mahasiswa, serta fitur ekspor/impor Excel.</p>
     </div>
@@ -12,12 +12,87 @@
         <a href="{{ route('admin.mitra.create') }}" class="btn btn-primary btn-touch text-white rounded-3 fw-semibold">
             + Tambah Mitra Baru
         </a>
+        <a href="{{ route('admin.mitra.template') }}" class="btn btn-outline-info btn-touch rounded-3 fw-semibold">
+            📄 Download Template Excel
+        </a>
         <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcelMitra">
             📥 Impor Excel
         </button>
         <a href="{{ route('admin.mitra.export') }}" class="btn btn-outline-secondary btn-touch rounded-3 fw-semibold">
             📊 Export Excel
         </a>
+    </div>
+</div>
+
+<!-- Ringkasan Statistik Data Mitra Header Cards -->
+<div class="row g-3 mb-4">
+    <!-- Stat Card 1: Total Mitra & Kategori -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-primary h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-primary fs-7 fw-bold">Total Mitra Instansi</span>
+                <span class="fs-4">🏢</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['total_mitra'] }} <span class="fs-6 text-muted font-normal">Mitra</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8 text-secondary">
+                <span>🏛️ SKPD: {{ $statsSummary['mitra_skpd'] }}</span>
+                <span>💼 Swasta: {{ $statsSummary['mitra_swasta'] }}</span>
+                <span>🏪 UMKM: {{ $statsSummary['mitra_umkm'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 2: Akun PIC Mitra -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-success h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-success fs-7 fw-bold">Akun PIC Mitra</span>
+                <span class="fs-4">👤</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['mitra_ber_pic'] }} <span class="fs-6 text-muted font-normal">Ber-PIC</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">✅ Ber-PIC: {{ $statsSummary['mitra_ber_pic'] }}</span>
+                <span class="text-warning fw-semibold">⚠️ Tanpa PIC: {{ $statsSummary['mitra_tanpa_pic'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 3: Plotting Kelompok PPL -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-info h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-info fs-7 fw-bold">Penempatan Kelompok</span>
+                <span class="fs-4">👥</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['mitra_terplot'] }} <span class="fs-6 text-muted font-normal">Mitra Terisi</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-info fw-semibold">📌 Terplot: {{ $statsSummary['mitra_terplot'] }}</span>
+                <span class="text-secondary fw-semibold">⏳ Standby: {{ $statsSummary['mitra_standby'] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 4: Kelengkapan Kontak & Alamat -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-custom p-3 border-start border-4 border-warning h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-warning fs-7 fw-bold">Kelengkapan Informasi</span>
+                <span class="fs-4">📇</span>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">
+                {{ $statsSummary['mitra_dengan_wa'] }} <span class="fs-6 text-muted font-normal">Terisi Kontak</span>
+            </h3>
+            <div class="d-flex justify-content-between fs-8">
+                <span class="text-success fw-semibold">📱 WA: {{ $statsSummary['mitra_dengan_wa'] }}</span>
+                <span class="text-primary fw-semibold">📍 Alamat: {{ $statsSummary['mitra_dengan_alamat'] }}</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -142,18 +217,26 @@
             <form action="{{ route('admin.mitra.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body fs-7">
-                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) yang berisi data instansi / perusahaan mitra PPL.</p>
+                    <p class="text-muted mb-2">Unggah berkas Excel (<code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code>) sesuai dengan format template resmi Mitra.</p>
+
+                    <div class="mb-3">
+                        <a href="{{ route('admin.mitra.template') }}" class="btn btn-sm btn-light border text-primary fw-semibold w-100 py-2">
+                            📥 Download Template Resmi Impor Mitra (.xlsx)
+                        </a>
+                    </div>
 
                     <div class="p-3 bg-light rounded-3 mb-3 border fs-8">
-                        <strong class="d-block mb-1 text-dark">📋 Petunjuk Baris Header Kolom Excel:</strong>
-                        <ul class="mb-0 ps-3 text-secondary">
-                            <li><code>nama_mitra_instansi</code> / <code>nama_mitra</code> : Nama Instansi / Perusahaan (Wajib)</li>
-                            <li><code>kategori</code> : SKPD / Swasta / UMKM (Default: SKPD)</li>
-                            <li><code>alamat</code> : Alamat Kantor Mitra (opsional)</li>
-                            <li><code>username_pic</code> : Username Login Akun PIC Mitra (opsional, auto-generate jika kosong)</li>
-                            <li><code>nama_pic_mitra</code> : Nama Lengkap Pembimbing Lapangan Mitra (opsional)</li>
-                            <li><code>no_hp_pic_mitra</code> : No HP / Whatsapp PIC Mitra (opsional)</li>
-                        </ul>
+                        <strong class="d-block mb-1 text-dark">📋 Urutan Kolom Template Impor Mitra:</strong>
+                        <ol class="mb-0 ps-3 text-secondary">
+                            <li><code>ID Mitra</code> (Dikosongkan saat tambah data baru)</li>
+                            <li><code>Nama Mitra Instansi</code> (Wajib)</li>
+                            <li><code>Kategori</code> (SKPD / Swasta / UMKM)</li>
+                            <li><code>Alamat</code> (Opsional)</li>
+                            <li><code>Nama PIC Mitra</code> (Wajib)</li>
+                            <li><code>Username PIC</code> (Opsional, dibuat otomatis jika kosong)</li>
+                            <li><code>Password PIC</code> (Default: <code>password123</code> jika dikosongkan)</li>
+                            <li><code>No HP PIC</code> (Opsional)</li>
+                        </ol>
                     </div>
 
                     <div class="mb-3">

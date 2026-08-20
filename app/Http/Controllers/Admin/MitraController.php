@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\MitraExport;
+use App\Exports\MitraTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Imports\MitraImport;
 use App\Models\Mitra;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -35,7 +37,23 @@ class MitraController extends Controller
 
         $mitraList = $query->latest()->paginate(20)->withQueryString();
 
-        return view('admin.mitra.index', compact('mitraList'));
+        // Ringkasan Statistik Data Mitra
+        $statsSummary = [
+            'total_mitra' => Mitra::count(),
+            'mitra_skpd' => Mitra::where('kategori', 'SKPD')->count(),
+            'mitra_swasta' => Mitra::where('kategori', 'Swasta')->count(),
+            'mitra_umkm' => Mitra::where('kategori', 'UMKM')->count(),
+            'mitra_ber_pic' => Mitra::whereNotNull('pic_user_id')->count(),
+            'mitra_tanpa_pic' => Mitra::whereNull('pic_user_id')->count(),
+            'mitra_terplot' => Mitra::whereHas('kelompokPpl')->count(),
+            'mitra_standby' => Mitra::doesntHave('kelompokPpl')->count(),
+            'mitra_dengan_wa' => Mitra::whereHas('picUser', function ($q) {
+                $q->whereNotNull('no_hp')->where('no_hp', '!=', '-')->where('no_hp', '!=', '');
+            })->count(),
+            'mitra_dengan_alamat' => Mitra::whereNotNull('alamat')->where('alamat', '!=', '-')->where('alamat', '!=', '')->count(),
+        ];
+
+        return view('admin.mitra.index', compact('mitraList', 'statsSummary'));
     }
 
     /**
@@ -43,16 +61,11 @@ class MitraController extends Controller
      */
     public function create()
     {
-        // PIC Mitra yang belum ditautkan ke Mitra manapun (1 PIC = 1 Mitra)
-        $availablePics = User::where('role', 'pic_mitra')
-            ->whereDoesntHave('mitraPic')
-            ->get();
-
-        return view('admin.mitra.create', compact('availablePics'));
+        return view('admin.mitra.create');
     }
 
     /**
-     * Simpan Data Mitra Baru.
+     * Simpan Data Mitra Baru beserta Akun PIC Mitra.
      */
     public function store(Request $request)
     {
@@ -60,42 +73,52 @@ class MitraController extends Controller
             'nama_mitra' => ['required', 'string', 'max:150'],
             'kategori' => ['required', Rule::in(['SKPD', 'Swasta', 'UMKM'])],
             'alamat' => ['nullable', 'string'],
-            'pic_option' => ['required', Rule::in(['existing', 'new', 'none'])],
-            'pic_user_id' => ['nullable', 'required_if:pic_option,existing', 'exists:users,id'],
-            'new_pic_username' => ['nullable', 'required_if:pic_option,new', 'string', 'max:50', 'unique:users,username'],
-            'new_pic_nama' => ['nullable', 'required_if:pic_option,new', 'string', 'max:100'],
-            'new_pic_hp' => ['nullable', 'string', 'max:20'],
+            'pic_nama' => ['required', 'string', 'max:100'],
+            'pic_username' => ['nullable', 'string', 'max:50'],
+            'pic_password' => ['nullable', 'string', 'min:6'],
+            'pic_no_hp' => ['nullable', 'string', 'max:20'],
         ], [
-            'nama_mitra.required' => 'Nama mitra wajib diisi.',
-            'new_pic_username.unique' => 'Username PIC ini sudah digunakan.',
+            'nama_mitra.required' => 'Nama mitra instansi wajib diisi.',
+            'pic_nama.required' => 'Nama PIC Mitra wajib diisi.',
+            'pic_password.min' => 'Password PIC minimal harus 6 karakter.',
         ]);
 
-        $picUserId = null;
-
-        if ($request->pic_option === 'existing') {
-            $picUserId = $request->pic_user_id;
-        } elseif ($request->pic_option === 'new') {
-            $newPic = User::create([
-                'username' => $request->new_pic_username,
-                'password' => Hash::make('password'),
-                'role' => 'pic_mitra',
-                'nama_lengkap' => $request->new_pic_nama,
-                'no_hp' => $request->new_pic_hp,
-                'must_change_password' => true,
-                'is_active' => true,
-            ]);
-            $picUserId = $newPic->id;
+        $usernamePic = trim((string) $request->pic_username);
+        if (empty($usernamePic)) {
+            $usernamePic = 'pic_' . Str::slug($request->nama_mitra, '_');
         }
 
+        // Ensure username is unique for the new PIC user
+        $originalUsername = $usernamePic;
+        $counter = 1;
+        while (User::withTrashed()->where('username', $usernamePic)->exists()) {
+            $usernamePic = $originalUsername . '_' . $counter;
+            $counter++;
+        }
+
+        $passwordInput = !empty($request->pic_password) ? $request->pic_password : 'password123';
+
+        // Create PIC User Account
+        $picUser = User::create([
+            'username' => $usernamePic,
+            'password' => Hash::make($passwordInput),
+            'role' => 'pic_mitra',
+            'nama_lengkap' => $request->pic_nama,
+            'no_hp' => $request->pic_no_hp,
+            'must_change_password' => true,
+            'is_active' => true,
+        ]);
+
+        // Create Mitra Record
         Mitra::create([
             'nama_mitra' => $request->nama_mitra,
             'kategori' => $request->kategori,
             'alamat' => $request->alamat,
-            'pic_user_id' => $picUserId,
+            'pic_user_id' => $picUser->id,
         ]);
 
         return redirect()->route('admin.mitra.index')
-            ->with('success', 'Data Mitra baru berhasil ditambahkan.');
+            ->with('success', 'Data Mitra baru beserta Akun PIC berhasil ditambahkan.');
     }
 
     /**
@@ -105,19 +128,11 @@ class MitraController extends Controller
     {
         $mitra->load('picUser');
 
-        // PIC Mitra yang belum ditautkan + PIC Mitra saat ini
-        $availablePics = User::where('role', 'pic_mitra')
-            ->where(function ($q) use ($mitra) {
-                $q->whereDoesntHave('mitraPic')
-                  ->orWhere('id', $mitra->pic_user_id);
-            })
-            ->get();
-
-        return view('admin.mitra.edit', compact('mitra', 'availablePics'));
+        return view('admin.mitra.edit', compact('mitra'));
     }
 
     /**
-     * Update Data Mitra.
+     * Update Data Mitra & Akun PIC Mitra.
      */
     public function update(Request $request, Mitra $mitra)
     {
@@ -125,18 +140,74 @@ class MitraController extends Controller
             'nama_mitra' => ['required', 'string', 'max:150'],
             'kategori' => ['required', Rule::in(['SKPD', 'Swasta', 'UMKM'])],
             'alamat' => ['nullable', 'string'],
-            'pic_user_id' => ['nullable', 'exists:users,id'],
+            'pic_nama' => ['required', 'string', 'max:100'],
+            'pic_username' => ['required', 'string', 'max:50'],
+            'pic_password' => ['nullable', 'string', 'min:6'],
+            'pic_no_hp' => ['nullable', 'string', 'max:20'],
+        ], [
+            'nama_mitra.required' => 'Nama mitra instansi wajib diisi.',
+            'pic_nama.required' => 'Nama PIC Mitra wajib diisi.',
+            'pic_username.required' => 'Username login PIC wajib diisi.',
         ]);
+
+        $mitra->load('picUser');
+        $picUser = $mitra->picUser;
+
+        if ($picUser) {
+            // Update existing PIC account
+            $usernameTaken = User::withTrashed()
+                ->where('username', $request->pic_username)
+                ->where('id', '!=', $picUser->id)
+                ->exists();
+
+            $picPayload = [
+                'nama_lengkap' => $request->pic_nama,
+                'no_hp' => $request->pic_no_hp,
+            ];
+
+            if (!$usernameTaken) {
+                $picPayload['username'] = $request->pic_username;
+            }
+
+            if ($request->filled('pic_password')) {
+                $picPayload['password'] = Hash::make($request->pic_password);
+            }
+
+            $picUser->update($picPayload);
+        } else {
+            // Create new PIC user if missing
+            $usernamePic = $request->pic_username;
+            $originalUsername = $usernamePic;
+            $counter = 1;
+            while (User::withTrashed()->where('username', $usernamePic)->exists()) {
+                $usernamePic = $originalUsername . '_' . $counter;
+                $counter++;
+            }
+
+            $passwordInput = !empty($request->pic_password) ? $request->pic_password : 'password123';
+
+            $picUser = User::create([
+                'username' => $usernamePic,
+                'password' => Hash::make($passwordInput),
+                'role' => 'pic_mitra',
+                'nama_lengkap' => $request->pic_nama,
+                'no_hp' => $request->pic_no_hp,
+                'must_change_password' => true,
+                'is_active' => true,
+            ]);
+
+            $mitra->pic_user_id = $picUser->id;
+        }
 
         $mitra->update([
             'nama_mitra' => $request->nama_mitra,
             'kategori' => $request->kategori,
             'alamat' => $request->alamat,
-            'pic_user_id' => $request->pic_user_id,
+            'pic_user_id' => $picUser->id ?? $mitra->pic_user_id,
         ]);
 
         return redirect()->route('admin.mitra.index')
-            ->with('success', 'Data Mitra berhasil diperbarui.');
+            ->with('success', 'Data Mitra & Akun PIC berhasil diperbarui.');
     }
 
     /**
@@ -156,6 +227,14 @@ class MitraController extends Controller
     public function exportExcel()
     {
         return Excel::download(new MitraExport, 'Master_Data_Mitra_PPL.xlsx');
+    }
+
+    /**
+     * Download Template Excel Import Mitra.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new MitraTemplateExport, 'Template_Import_Mitra_PPL.xlsx');
     }
 
     /**

@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
             
             // Master Data Mitra & Kelompok
             Route::get('/mitra/export', [AdminMitraController::class, 'exportExcel'])->name('mitra.export');
+            Route::get('/mitra/template', [AdminMitraController::class, 'downloadTemplate'])->name('mitra.template');
             Route::post('/mitra/import', [AdminMitraController::class, 'importExcel'])->name('mitra.import');
             Route::resource('mitra', AdminMitraController::class);
             Route::get('/kelompok/{kelompok}/logbook-pdf', [LogbookCetakPdfController::class, 'downloadPdf'])->name('kelompok.logbook.pdf');
