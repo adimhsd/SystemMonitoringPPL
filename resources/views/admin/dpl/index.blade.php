@@ -12,9 +12,6 @@
         <a href="{{ route('admin.dpl.create') }}" class="btn btn-primary btn-touch rounded-3 fw-semibold">
             + Tambah DPL Baru
         </a>
-        <a href="{{ route('admin.dpl.template') }}" class="btn btn-outline-info btn-touch rounded-3 fw-semibold">
-            📄 Download Template Excel
-        </a>
         <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcelDpl">
             📥 Impor Excel
         </button>

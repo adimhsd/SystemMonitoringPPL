@@ -12,9 +12,6 @@
         <a href="{{ route('admin.mitra.create') }}" class="btn btn-primary btn-touch text-white rounded-3 fw-semibold">
             + Tambah Mitra Baru
         </a>
-        <a href="{{ route('admin.mitra.template') }}" class="btn btn-outline-info btn-touch rounded-3 fw-semibold">
-            📄 Download Template Excel
-        </a>
         <button type="button" class="btn btn-outline-success btn-touch rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImportExcelMitra">
             📥 Impor Excel
         </button>
