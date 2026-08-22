@@ -54,4 +54,9 @@ class KelompokPpl extends Model
     {
         return $this->hasOne(PenilaianPpl::class, 'kelompok_id');
     }
+
+    public function monitoringDpl()
+    {
+        return $this->hasMany(MonitoringDpl::class, 'kelompok_id');
+    }
 }

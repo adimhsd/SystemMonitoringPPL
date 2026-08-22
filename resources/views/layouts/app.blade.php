@@ -156,6 +156,9 @@
                 <a href="{{ route('admin.plotting.index') }}" class="sidebar-link {{ request()->routeIs('admin.plotting.*') ? 'active' : '' }}">
                     <span>🗺️</span> <span>Plotting Kelompok</span>
                 </a>
+                <a href="{{ route('admin.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('admin.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Monitoring DPL</span>
+                </a>
                 <a href="{{ route('admin.penilaian.index') }}" class="sidebar-link {{ request()->routeIs('admin.penilaian.*') ? 'active' : '' }}">
                     <span>📝</span> <span>Penilaian PPL</span>
                 </a>
@@ -197,6 +200,9 @@
                 <a href="{{ route('dpl.dashboard') }}" class="sidebar-link {{ request()->routeIs('dpl.dashboard') ? 'active' : '' }}">
                     <span>📊</span> <span>Dashboard</span>
                 </a>
+                <a href="{{ route('dpl.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('dpl.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Monitoring DPL</span>
+                </a>
                 <a href="{{ route('dpl.logbook.index') }}" class="sidebar-link {{ request()->routeIs('dpl.logbook.*') ? 'active' : '' }}">
                     <span>📘</span> <span>Logbook Harian</span>
                 </a>
@@ -225,6 +231,9 @@
             @elseif(Auth::user()->role === 'ketua_kelompok')
                 <a href="{{ route('student.dashboard') }}" class="sidebar-link {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
                     <span>📊</span> <span>Dashboard</span>
+                </a>
+                <a href="{{ route('student.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('student.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Kunjungan DPL</span>
                 </a>
                 <a href="{{ route('student.logbook.index') }}" class="sidebar-link {{ request()->routeIs('student.logbook.*') ? 'active' : '' }}">
                     <span>📘</span> <span>Logbook Harian</span>
@@ -270,6 +279,9 @@
                 <a href="{{ route('admin.plotting.index') }}" class="sidebar-link {{ request()->routeIs('admin.plotting.*') ? 'active' : '' }}">
                     <span>🗺️</span> <span>Plotting Kelompok</span>
                 </a>
+                <a href="{{ route('admin.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('admin.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Monitoring DPL</span>
+                </a>
                 <a href="{{ route('admin.penilaian.index') }}" class="sidebar-link {{ request()->routeIs('admin.penilaian.*') ? 'active' : '' }}">
                     <span>📝</span> <span>Penilaian PPL</span>
                 </a>
@@ -311,6 +323,9 @@
                 <a href="{{ route('dpl.dashboard') }}" class="sidebar-link {{ request()->routeIs('dpl.dashboard') ? 'active' : '' }}">
                     <span>📊</span> <span>Dashboard</span>
                 </a>
+                <a href="{{ route('dpl.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('dpl.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Monitoring DPL</span>
+                </a>
                 <a href="{{ route('dpl.logbook.index') }}" class="sidebar-link {{ request()->routeIs('dpl.logbook.*') ? 'active' : '' }}">
                     <span>📘</span> <span>Logbook Harian</span>
                 </a>
@@ -339,6 +354,9 @@
             @elseif(Auth::user()->role === 'ketua_kelompok')
                 <a href="{{ route('student.dashboard') }}" class="sidebar-link {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
                     <span>📊</span> <span>Dashboard</span>
+                </a>
+                <a href="{{ route('student.monitoring.index') }}" class="sidebar-link {{ request()->routeIs('student.monitoring.*') ? 'active' : '' }}">
+                    <span>📍</span> <span>Kunjungan DPL</span>
                 </a>
                 <a href="{{ route('student.logbook.index') }}" class="sidebar-link {{ request()->routeIs('student.logbook.*') ? 'active' : '' }}">
                     <span>📘</span> <span>Logbook Harian</span>

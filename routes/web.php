@@ -19,6 +19,9 @@ use App\Http\Controllers\Dpl\LogbookController as DplLogbookController;
 use App\Http\Controllers\Dpl\LuaranController as DplLuaranController;
 use App\Http\Controllers\Dpl\PenilaianController as DplPenilaianController;
 
+use App\Http\Controllers\Admin\MonitoringController as AdminMonitoringController;
+use App\Http\Controllers\Dpl\MonitoringController as DplMonitoringController;
+use App\Http\Controllers\KetuaKelompok\MonitoringController as StudentMonitoringController;
 use App\Http\Controllers\KetuaKelompok\DashboardController as StudentDashboardController;
 use App\Http\Controllers\KetuaKelompok\LogbookController as StudentLogbookController;
 use App\Http\Controllers\KetuaKelompok\LuaranController as StudentLuaranController;
@@ -115,6 +118,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/export/nilai-excel', [AdminExportController::class, 'exportNilaiExcel'])->name('export.nilai.excel');
             Route::get('/export/kelompok-excel', [AdminExportController::class, 'exportKelompokExcel'])->name('export.kelompok.excel');
             Route::get('/export/mitra-excel', [AdminExportController::class, 'exportMitraExcel'])->name('export.mitra.excel');
+
+            // Monitoring DPL Admin Summary
+            Route::get('/monitoring', [AdminMonitoringController::class, 'index'])->name('monitoring.index');
         });
 
         // DPL Role Routes
@@ -130,6 +136,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/penilaian', [DplPenilaianController::class, 'index'])->name('penilaian.index');
             Route::get('/penilaian/{kelompok}/edit', [DplPenilaianController::class, 'edit'])->name('penilaian.edit');
             Route::put('/penilaian/{kelompok}', [DplPenilaianController::class, 'update'])->name('penilaian.update');
+
+            // Monitoring DPL Kunjungan Lapangan
+            Route::resource('monitoring', DplMonitoringController::class);
         });
 
         // PIC Mitra Role Routes
@@ -151,6 +160,10 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('logbook', StudentLogbookController::class);
             Route::get('/luaran', [StudentLuaranController::class, 'index'])->name('luaran.index');
             Route::post('/luaran', [StudentLuaranController::class, 'storeOrUpdate'])->name('luaran.store');
+
+            // Monitoring DPL Approval by Student
+            Route::get('/monitoring', [StudentMonitoringController::class, 'index'])->name('monitoring.index');
+            Route::post('/monitoring/{monitoring}/approve', [StudentMonitoringController::class, 'approve'])->name('monitoring.approve');
         });
 
         // Alias for ketua route names
@@ -160,6 +173,10 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('logbook', StudentLogbookController::class);
             Route::get('/luaran', [StudentLuaranController::class, 'index'])->name('luaran.index');
             Route::post('/luaran', [StudentLuaranController::class, 'storeOrUpdate'])->name('luaran.store');
+
+            // Monitoring DPL Approval by Student
+            Route::get('/monitoring', [StudentMonitoringController::class, 'index'])->name('monitoring.index');
+            Route::post('/monitoring/{monitoring}/approve', [StudentMonitoringController::class, 'approve'])->name('monitoring.approve');
         });
 
         // Shared Foto & PDF Download Routes

@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notifikasi::class, 'user_id');
     }
+
+    public function monitoringDpl()
+    {
+        return $this->hasMany(MonitoringDpl::class, 'dpl_user_id');
+    }
 }
