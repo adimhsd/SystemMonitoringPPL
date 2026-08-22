@@ -1,6 +1,6 @@
 -- ========================================================
 -- Database Backup - Sistem Monitoring PPL FEB UNIKU
--- Date: 2026-08-20 17:13:29
+-- Date: 2026-08-22 13:46:31
 -- Database Driver: mysql
 -- ========================================================
 
@@ -686,7 +686,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table `migrations`
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('1', '0001_01_01_000000_create_users_table', '1');
@@ -705,6 +705,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('13', '2026_01_01_
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('14', '2026_01_01_000012_add_status_validasi_mitra_to_kegiatan_harian_table', '1');
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('15', '2026_01_01_000013_rename_kelas_to_konsentrasi_in_anggota_kelompok_table', '1');
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('16', '2026_01_01_000014_add_email_to_users_table', '2');
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES ('17', '2026_01_01_000015_create_monitoring_dpl_table', '3');
 
 -- --------------------------------------------------------
 -- Table structure for table `mitra`
@@ -792,7 +793,7 @@ INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `d
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('64', 'PT Cakra Alpha Spektrum', 'Swasta', 'Northridge Business Center, Jl. BSD Raya Utama B1/10, Lengkong Kulon, Kec. Pagedangan, Kabupaten Tangerang, Banten 15331', '106', NULL, '2026-08-20 14:54:23', '2026-08-20 14:54:23');
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('65', 'Inspektorat Kabupaten Kuningan', 'Swasta', 'Jl .Dr. Ir. Soekaro, Winduherang, Kec. Kuningan, Kabupaten Kuningan.', '107', NULL, '2026-08-20 14:54:23', '2026-08-20 14:54:23');
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('66', 'Dinas Perhubungan Kabupaten Kuningan', 'Swasta', '2GP6+X5P, Jl. Mochamad Yamin, Ancaran, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat 45514', '108', NULL, '2026-08-20 14:54:24', '2026-08-20 14:54:24');
-INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('67', 'Dinas Pekerjaan Umum dan Tata Ruang', 'Swasta', '2GGF+GG6, Unnamed Road, Kertawangunan, Kec. Sindangagung, Kabupaten Kuningan, Jawa Barat 45573', '109', NULL, '2026-08-20 14:54:24', '2026-08-20 14:54:24');
+INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('67', 'Dinas Pekerjaan Umum dan Tata Ruang', 'SKPD', '2GGF+GG6, Unnamed Road, Kertawangunan, Kec. Sindangagung, Kabupaten Kuningan, Jawa Barat 45573', '109', NULL, '2026-08-20 14:54:24', '2026-08-20 23:00:54');
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('68', 'Badan Pengelolaan Pendapatan Daerah', 'Swasta', 'Jalan Siliwangi No. 88 Telp. (0232) 871620, 876511 FAX 871620', '110', NULL, '2026-08-20 14:54:24', '2026-08-20 14:54:24');
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('69', 'Perumda Aneka Usaha Kuningan (PDAU)', 'Swasta', 'Jl. Siliwangi No.9, Cirendang, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat 45553', '111', NULL, '2026-08-20 14:54:24', '2026-08-20 14:54:24');
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('70', 'Mantera Rattan', 'Swasta', 'Kertasari, Kec. Weru, Kab. Cirebon, Jawa Barat 45154', '112', NULL, '2026-08-20 14:54:25', '2026-08-20 14:54:25');
@@ -809,6 +810,33 @@ INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `d
 INSERT INTO `mitra` (`id`, `nama_mitra`, `kategori`, `alamat`, `pic_user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES ('81', 'Desa Ciawilor', 'SKPD', 'Kecamatan Ciawigebang', '123', NULL, '2026-08-20 14:54:28', '2026-08-20 14:54:28');
 
 -- --------------------------------------------------------
+-- Table structure for table `monitoring_dpl`
+-- --------------------------------------------------------
+DROP TABLE IF EXISTS `monitoring_dpl`;
+CREATE TABLE `monitoring_dpl` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `dpl_user_id` bigint unsigned NOT NULL,
+  `kelompok_id` bigint unsigned NOT NULL,
+  `jenis_kunjungan` enum('penyerahan','penarikan','kunjungan_rutin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'penyerahan',
+  `tanggal_kunjungan` date NOT NULL,
+  `waktu_kunjungan` time DEFAULT NULL,
+  `catatan_kunjungan` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `foto_kunjungan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `disetujui_kelompok` tinyint(1) NOT NULL DEFAULT '0',
+  `tanggal_disetujui` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `monitoring_dpl_dpl_user_id_foreign` (`dpl_user_id`),
+  KEY `monitoring_dpl_kelompok_id_foreign` (`kelompok_id`),
+  CONSTRAINT `monitoring_dpl_dpl_user_id_foreign` FOREIGN KEY (`dpl_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `monitoring_dpl_kelompok_id_foreign` FOREIGN KEY (`kelompok_id`) REFERENCES `kelompok_ppl` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table `monitoring_dpl`
+INSERT INTO `monitoring_dpl` (`id`, `dpl_user_id`, `kelompok_id`, `jenis_kunjungan`, `tanggal_kunjungan`, `waktu_kunjungan`, `catatan_kunjungan`, `foto_kunjungan`, `disetujui_kelompok`, `tanggal_disetujui`, `created_at`, `updated_at`) VALUES ('1', '35', '54', 'penyerahan', '2026-08-22', '06:23:00', 'Unggah foto kegiatan penyerahan/penarikan mahasiswa di lokasi mitra (Format: JPG, PNG, WebP, Maks 5MB).', 'monitoring_dpl/w4pjVViGTtxxFPko6NTD2pNX4n2XNouRUkIlVVxG.png', '1', '2026-08-22 06:28:04', '2026-08-22 06:24:05', '2026-08-22 06:28:04');
+
+-- --------------------------------------------------------
 -- Table structure for table `notifikasi`
 -- --------------------------------------------------------
 DROP TABLE IF EXISTS `notifikasi`;
@@ -823,9 +851,11 @@ CREATE TABLE `notifikasi` (
   PRIMARY KEY (`id`),
   KEY `idx_user_unread` (`user_id`,`is_read`),
   CONSTRAINT `notifikasi_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table `notifikasi`
+INSERT INTO `notifikasi` (`id`, `user_id`, `judul`, `pesan`, `tipe`, `is_read`, `created_at`) VALUES ('1', '177', 'Laporan Kunjungan DPL Baru', 'DPL Adi Muhamad Muhsidi, S.SI. M.Kom. telah mengunggah bukti Kunjungan Awal (Penyerahan) pada tanggal 2026-08-22. Mohon lakukan verifikasi & persetujuan di sistem.', 'sistem', '0', '2026-08-22 13:24:05');
+INSERT INTO `notifikasi` (`id`, `user_id`, `judul`, `pesan`, `tipe`, `is_read`, `created_at`) VALUES ('2', '35', 'Kunjungan DPL Disetujui Kelompok', 'Kelompok KELOMPOK 54 telah menyetujui bukti Kunjungan Awal (Penyerahan) tanggal 22/08/2026.', 'sistem', '0', '2026-08-22 13:28:04');
 
 -- --------------------------------------------------------
 -- Table structure for table `password_reset_tokens`
@@ -891,7 +921,12 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table `sessions`
-INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('rV0sJmD3DtMv5ZGNHiRf42zu5nQNlrhyKewywxVy', '1', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJRUlJmOVBsbGZHR1Y1R1BHdlpXVVRLR29xVjRXN282MHlPSGg5RmJwIiwiX2ZsYXNoIjp7Im5ldyI6W10sIm9sZCI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9iYWNrdXBcL2Rvd25sb2FkIiwicm91dGUiOiJhZG1pbi5iYWNrdXAuZG93bmxvYWQifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjF9', '1787246009');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('B2MiRH6lutvDKlDaYt1KL8xNCuTQ1snisLIFyedG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJKYVZyZ3hnWE5XU1hSMk1lNVRVa0JhUE1hWUI5Uk5uNDg0dFpWeFBGIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL25vdGlmaWNhdGlvbnMifSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9sb2dpbiIsInJvdXRlIjoibG9naW4ifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==', '1787406391');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('beIc9wuCNGwrb61Bkb4pgWJkatLuS2EtsHsYcrbL', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJ0am1jQ2NBTjZ2R0k2WjZVZFlMbGJ6Qml6MGNLcU9TVG5XaHJqU3lQIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9sb2dpbiIsInJvdXRlIjoibG9naW4ifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==', '1787406109');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('P8dNzsks8xDh52UArxfUjb1nWsen2jnUUY86eXZK', '177', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJpZ2NxRW4wVjB6ZHFZYzJob2dReExsYkFNQ2NIRnBmQmpNN0M5N05DIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9ub3RpZmljYXRpb25zIiwicm91dGUiOiJub3RpZmljYXRpb25zLmluZGV4In0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjE3N30=', '1787387915');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('R94JIYBKeUmUwKFJSqzTxgv47dQZXVlLIYYrnkq0', '1', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJJWDg4a3YycGZxRHl6M1BrSG1HQmM2aWJvZmMzc1p0ejRESVNDakdvIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9ub3RpZmljYXRpb25zIiwicm91dGUiOiJub3RpZmljYXRpb25zLmluZGV4In0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjF9', '1787406363');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('tKVv3ekNKcoAUfa20pCbkFtK8rpOcbfhUgO3Y5ay', '35', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJ2alZjZmNJWVVpNXo3RkRpWFhhUlFtbHNNUVpFTXBVbHVqR1B3VzYzIiwiX2ZsYXNoIjp7Im5ldyI6W10sIm9sZCI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL25vdGlmaWNhdGlvbnMiLCJyb3V0ZSI6Im5vdGlmaWNhdGlvbnMuaW5kZXgifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjM1fQ==', '1787387916');
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES ('x69gvxxPys9n6pwIhCzo75RRW6VYgeFJeh1SG1kK', '1', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJEbXVPSVV2MTlOaG91TzRvMGg2RFBrWVRVM2RlaTQyTUg3d1p1cHVYIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2RwbFwvZGFzaGJvYXJkIn0sIl9wcmV2aW91cyI6eyJ1cmwiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvbm90aWZpY2F0aW9ucyIsInJvdXRlIjoibm90aWZpY2F0aW9ucy5pbmRleCJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoxfQ==', '1787387917');
 
 -- --------------------------------------------------------
 -- Table structure for table `users`
@@ -951,7 +986,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_h
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('32', 'DPL_PPL31', '$2y$12$9Zspn4Befy69UhGUxMomZ.PBlB5ykw.Q9pP9K7wVEK4TXQxHJmtTi', 'dpl', 'Syahrul Syarifudin, S.E., M.M.', '081381458423', NULL, NULL, '1', '1', '2026-08-20 14:09:21', '2026-08-20 14:09:21', NULL);
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('33', 'DPL_PPL32', '$2y$12$VW3edLq3XHxlX616tDQea.1qWyeq5AY1GH3djKHjS82VN4xQD5AkW', 'dpl', 'Neng Evi kartika, S.E., M.M.', '085659295951', NULL, NULL, '1', '1', '2026-08-20 14:09:21', '2026-08-20 14:09:21', NULL);
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('34', 'DPL_PPL33', '$2y$12$hk5frgUAotCzq4h4Osz1v.FCa1UxeHHZE9p8hGRooKBPoh2evBKwe', 'dpl', 'Dr. Yasir Maulana', '081287834848', NULL, NULL, '1', '1', '2026-08-20 14:09:21', '2026-08-20 14:09:21', NULL);
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('35', 'DPL_PPL34', '$2y$12$U4SOv5Vy19YmvqoCwXjnp.Wl3za29kxOJGZU78ui46KIvFpMghozu', 'dpl', 'Adi Muhamad Muhsidi, S.SI. M.Kom.', '085220621404', NULL, NULL, '1', '1', '2026-08-20 14:09:21', '2026-08-20 14:09:21', NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('35', 'DPL_PPL34', '$2y$12$FA8TM2YXDEyzmO.uLt91me8tOWTWahpjLLU/7WvZVUUwhC9qQ9d8.', 'dpl', 'Adi Muhamad Muhsidi, S.SI. M.Kom.', '085220621404', NULL, NULL, '0', '1', '2026-08-20 14:09:21', '2026-08-20 17:19:43', NULL);
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('36', 'DPL_PPL35', '$2y$12$JmVuSLhoOaPza3ejY1.xseJur9elYhOuytPS3Wu6ct4mckKgOoCJS', 'dpl', 'Januar Habibi Mahsyar, S.E., M.M.', '085295858080', NULL, NULL, '1', '1', '2026-08-20 14:09:22', '2026-08-20 14:09:22', NULL);
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('37', 'DPL_PPL36', '$2y$12$R2QBdgZFJMC1IPA5HlW3cOwgQNHolWImFu.sx5QuYqiJwt0CaNaiW', 'dpl', 'Nurul Siti Jahidah, S.P., M.E', '085860702216', NULL, NULL, '1', '1', '2026-08-20 14:09:22', '2026-08-20 14:09:22', NULL);
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_lengkap`, `no_hp`, `email`, `nip_nidn`, `must_change_password`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES ('38', 'DPL_PPL37', '$2y$12$eL2ozpFUaa6wjohezHhiHOwpL/4Cg4zbZdLVKLYr5XiAGAgmi8m4u', 'dpl', 'Yayan Sopyan, S.Kom., M.Kom', '081910080791', NULL, NULL, '1', '1', '2026-08-20 14:09:22', '2026-08-20 14:09:22', NULL);

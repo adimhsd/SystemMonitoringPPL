@@ -14,7 +14,7 @@ class LoginPageCustomizationTest extends TestCase
         $response->assertSee('images/logo-uniku.png');
         $response->assertSee('Logo Universitas Kuningan');
         $response->assertSee('FEB - Universitas Kuningan');
-        $response->assertSee('https://adi-muhamad.my.id/');
+        $response->assertSee('https://adi-muhamad.web.app/');
         $response->assertSee('Dosen Sontoloyo');
         $response->assertSee('wa.me/6285220621404');
     }

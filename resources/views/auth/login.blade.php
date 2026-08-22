@@ -99,7 +99,7 @@
             &copy; {{ date('Y') }} FEB - Universitas Kuningan
         </div>
         <div class="text-muted" style="font-size: 0.65rem;">
-            Developed by <a href="https://adi-muhamad.my.id/" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-primary">Dosen Sontoloyo</a>
+            Developed by <a href="https://adi-muhamad.web.app/" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-primary">Dosen Sontoloyo</a>
         </div>
     </div>
 </div>
